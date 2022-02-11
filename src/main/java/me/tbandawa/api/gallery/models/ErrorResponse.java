@@ -63,7 +63,7 @@ public class ErrorResponse {
         	return this;
         }
         
-        public ErrorResponseBuilder withMessage(List<String> messages) {
+        public ErrorResponseBuilder withMessages(List<String> messages) {
         	this.messages = messages;
         	return this;
         }
