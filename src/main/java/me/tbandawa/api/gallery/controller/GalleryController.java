@@ -1,12 +1,15 @@
 package me.tbandawa.api.gallery.controller;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -32,10 +35,11 @@ public class GalleryController {
 	@PostMapping(value = "/gallery", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public Gallery createArticle(
 			@Valid Gallery gallery,
-			@RequestPart(value = "gellery_images", required = false) MultipartFile[] gellery_images) {
+			@RequestPart(value = "gallery_images", required = false) MultipartFile[] gallery_images) {
 		Gallery savedGallery = galleryService.saveGallery(gallery);
-		if (null != gellery_images) {
-			savedGallery.setImages(imageService.saveImages(savedGallery.getId(), gellery_images));
+		
+		if (gallery_images.length > 0 && !gallery_images[0].isEmpty()) {
+			savedGallery.setImages(imageService.saveImages(savedGallery.getId(), gallery_images));
 		} else {
 			savedGallery.setImages(new ArrayList<String>());
 		}
@@ -43,18 +47,18 @@ public class GalleryController {
 	}
 	
 	//get all articles
-	/*@GetMapping("/gallery")
-	public List<Article> getArticles() {
-		return articlesService.getAllArticles().stream()
-				.map(article -> {
-					article.setImages(imageService.getImages("articles", String.valueOf(article.getId())));
-					return article;
+	@GetMapping("/gallery")
+	public List<Gallery> getGallery() {
+		return galleryService.getAllGallery().stream()
+				.map(gallery -> {
+					gallery.setImages(imageService.getImages(gallery.getId()));
+					return gallery;
 				})
 				.collect(Collectors.toList());
 	}
 	
 	//get single articles
-	@GetMapping("/gallery/{id}")
+	/*@GetMapping("/gallery/{id}")
 	public Article getNews(@PathVariable(value = "id") Long articleId) {
 		System.out.println(imageService.getImages("articles", String.valueOf(articleId)));
 		Article article = articlesService.getArticle(articleId)
