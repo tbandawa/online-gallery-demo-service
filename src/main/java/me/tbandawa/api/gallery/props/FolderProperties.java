@@ -11,4 +11,8 @@ public class FolderProperties {
 		return imagesFolder;
 	}
 
+	public void setImagesFolder(String imagesFolder) {
+		this.imagesFolder = imagesFolder;
+	}
+
 }

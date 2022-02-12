@@ -6,10 +6,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface ImageService {
 	
-	List<String> saveImages(String gelleryId, MultipartFile[] images);
+	List<String> saveImages(Long galleryId, MultipartFile[] images);
 	
-	List<String> getImages(String gelleryId);
+	List<String> getImages(Long galleryId);
 	
-	void deleteImages(String gelleryId);
+	void deleteImages(Long galleryId);
 
 }
