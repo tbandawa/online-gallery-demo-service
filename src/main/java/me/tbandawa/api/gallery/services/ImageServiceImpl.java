@@ -22,7 +22,7 @@ import me.tbandawa.api.gallery.exceptions.InvalidFileTypeException;
 import me.tbandawa.api.gallery.props.FolderProperties;
 
 @Service
-public class ImagesServiceImpl implements ImageService {
+public class ImageServiceImpl implements ImageService {
 	
 	private static final List<String> imageTypes = Arrays.asList("image/png", "image/jpeg", "image/jpeg", "image/gif");
 
@@ -46,7 +46,7 @@ public class ImagesServiceImpl implements ImageService {
 	public List<String> getImages(Long galleryId) {
 		List<String> imageURIs;
 		try {
-			imageURIs = Files.list(Paths.get(folderProperties.getImagesFolder() + File.pathSeparator + String.valueOf(galleryId)))
+			imageURIs = Files.list(Paths.get(folderProperties.getImagesFolder() + File.separatorChar + String.valueOf(galleryId) + File.separatorChar))
 		            .map(Path::toFile)
 		            .map(File::getPath)
 		            .map(filePath ->
@@ -63,13 +63,13 @@ public class ImagesServiceImpl implements ImageService {
 
 	@Override
 	public void deleteImages(Long galleryId) {
-		FileSystemUtils.deleteRecursively(new File(folderProperties.getImagesFolder() + File.pathSeparator + String.valueOf(galleryId)));
+		FileSystemUtils.deleteRecursively(new File(folderProperties.getImagesFolder() + File.separatorChar + String.valueOf(galleryId)));
 	}
 	
-	private String saveImage(Long galleryId, int imageIndex, MultipartFile image) {
+	private String saveImage(Long galleryId, int imageIndex, MultipartFile image) {		
 		String imageUri;
 		Path imageLocation = Paths
-				.get(folderProperties.getImagesFolder() + File.pathSeparator + String.valueOf(galleryId))
+				.get(folderProperties.getImagesFolder() + File.separatorChar + String.valueOf(galleryId) + File.separatorChar)
 				.toAbsolutePath()
 				.normalize();
 		try {
@@ -83,7 +83,7 @@ public class ImagesServiceImpl implements ImageService {
             Files.copy(image.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
             
             imageUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-                    .path(folderProperties.getImagesFolder() + File.pathSeparator + String.valueOf(galleryId))
+                    .path(folderProperties.getImagesFolder() + File.separatorChar + String.valueOf(galleryId) + File.separatorChar)
                     .path(fileName)
                     .toUriString();
             
