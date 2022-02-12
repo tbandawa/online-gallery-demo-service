@@ -63,7 +63,7 @@ public class ImageServiceImpl implements ImageService {
 
 	@Override
 	public void deleteImages(Long galleryId) {
-		FileSystemUtils.deleteRecursively(new File(folderProperties.getImagesFolder() + File.pathSeparator + String.valueOf(galleryId)));
+		FileSystemUtils.deleteRecursively(new File(folderProperties.getImagesFolder() + File.separatorChar + String.valueOf(galleryId)));
 	}
 	
 	private String saveImage(Long galleryId, int imageIndex, MultipartFile image) {		

@@ -8,7 +8,9 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -69,13 +71,13 @@ public class GalleryController {
 	}
 	
 	//delete article
-	/*@DeleteMapping("/gallery/{id}")
-	public ResponseEntity<?> deleteNews(@PathVariable(value = "id") Long articleId) {
-	    Article article = articlesService.getArticle(articleId)
-	    		.orElseThrow(() -> new ResourceNotFoundException("Article", "id", articleId));
-	    imageService.deleteImages("articles", String.valueOf(articleId));
-	    articlesService.deleteArticle(article.getId());
+	@DeleteMapping("/gallery/{id}")
+	public ResponseEntity<?> deleteGallery(@PathVariable(value = "id") Long galleryId) {
+	    Gallery gallery = galleryService.getGallery(galleryId)
+	    		.orElseThrow(() -> new ResourceNotFoundException("Gallery with id: " + galleryId + " not found"));
+	    imageService.deleteImages(galleryId);
+	    galleryService.deleteGallery(gallery.getId());
 	    return ResponseEntity.ok().build();
-	}*/
+	}
 
 }
