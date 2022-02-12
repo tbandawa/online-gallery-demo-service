@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import org.springframework.stereotype.Service;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -20,6 +21,7 @@ import me.tbandawa.api.gallery.exceptions.FileStorageException;
 import me.tbandawa.api.gallery.exceptions.InvalidFileTypeException;
 import me.tbandawa.api.gallery.props.FolderProperties;
 
+@Service
 public class ImagesServiceImpl implements ImageService {
 	
 	private static final List<String> imageTypes = Arrays.asList("image/png", "image/jpeg", "image/jpeg", "image/gif");

@@ -3,9 +3,12 @@ package me.tbandawa.api.gallery.services;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.stereotype.Service;
+
 import me.tbandawa.api.gallery.daos.GalleryDao;
 import me.tbandawa.api.gallery.models.Gallery;
 
+@Service
 public class GalleryServiceImpl implements GalleryService {
 	
 	private GalleryDao galleryDao;
