@@ -10,12 +10,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import me.tbandawa.api.gallery.exceptions.ResourceNotFoundException;
 import me.tbandawa.api.gallery.models.Gallery;
 import me.tbandawa.api.gallery.services.GalleryService;
 import me.tbandawa.api.gallery.services.ImageService;
@@ -58,17 +60,16 @@ public class GalleryController {
 	}
 	
 	//get single articles
-	/*@GetMapping("/gallery/{id}")
-	public Article getNews(@PathVariable(value = "id") Long articleId) {
-		System.out.println(imageService.getImages("articles", String.valueOf(articleId)));
-		Article article = articlesService.getArticle(articleId)
-				.orElseThrow(() -> new ResourceNotFoundException("Article", "id", articleId));
-		article.setImages(imageService.getImages("articles", String.valueOf(article.getId())));
-		return article;
+	@GetMapping("/gallery/{id}")
+	public Gallery getNews(@PathVariable(value = "id") Long galleryId) {
+		Gallery gallery = galleryService.getGallery(galleryId)
+				.orElseThrow(() -> new ResourceNotFoundException("Gallery with id: " + galleryId + " not found"));
+		gallery.setImages(imageService.getImages(gallery.getId()));
+		return gallery;
 	}
 	
 	//delete article
-	@DeleteMapping("/gallery/{id}")
+	/*@DeleteMapping("/gallery/{id}")
 	public ResponseEntity<?> deleteNews(@PathVariable(value = "id") Long articleId) {
 	    Article article = articlesService.getArticle(articleId)
 	    		.orElseThrow(() -> new ResourceNotFoundException("Article", "id", articleId));

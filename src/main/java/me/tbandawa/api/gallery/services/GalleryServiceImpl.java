@@ -29,7 +29,7 @@ public class GalleryServiceImpl implements GalleryService {
 
 	@Override
 	public Optional<Gallery> getGallery(long id) {
-		return this.getGallery(id);
+		return this.galleryDao.get(id);
 	}
 
 	@Override

@@ -46,7 +46,7 @@ public class ImageServiceImpl implements ImageService {
 	public List<String> getImages(Long galleryId) {
 		List<String> imageURIs;
 		try {
-			imageURIs = Files.list(Paths.get(folderProperties.getImagesFolder() + File.pathSeparator + String.valueOf(galleryId)))
+			imageURIs = Files.list(Paths.get(folderProperties.getImagesFolder() + File.separatorChar + String.valueOf(galleryId) + File.separatorChar))
 		            .map(Path::toFile)
 		            .map(File::getPath)
 		            .map(filePath ->
