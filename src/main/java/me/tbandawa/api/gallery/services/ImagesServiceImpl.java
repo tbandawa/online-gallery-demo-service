@@ -2,11 +2,31 @@ package me.tbandawa.api.gallery.services;
 
 import java.awt.image.ImageConsumer;
 import java.awt.image.ImageProducer;
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import me.tbandawa.api.gallery.exceptions.FileStorageException;
+import me.tbandawa.api.gallery.props.FolderProperties;
+
 public class ImagesServiceImpl implements ImageService, ImageProducer {
+
+	
+	public void setFolderProperties(FolderProperties folderProperties) {
+		Path fileStorageLocation = Paths
+				.get(folderProperties.getImagesFolder())
+				.toAbsolutePath()
+				.normalize();
+		try {
+            Files.createDirectories(fileStorageLocation);
+        } catch (Exception ex) {
+            throw new FileStorageException("Could not create the " + folderProperties.getImagesFolder() + " directory.", ex);
+        }
+	}
 
 	@Override
 	public void addConsumer(ImageConsumer ic) {
