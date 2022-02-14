@@ -14,6 +14,7 @@ import org.springframework.validation.BindException;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
@@ -30,6 +31,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 	 * @return a {@code ResponseEntity} wrapping {@code ErrorResponse}
 	 */
     @ExceptionHandler(ResourceNotFoundException.class)
+    @ResponseStatus(code = HttpStatus.NOT_FOUND)
     public ResponseEntity<ErrorResponse> handleResourceNotFound(
     		ResourceNotFoundException ex, WebRequest request){
         ErrorResponse errorResponse = new ErrorResponse.ErrorResponseBuilder()
@@ -48,6 +50,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 	 * @return a {@code ResponseEntity} wrapping {@code ErrorResponse}
 	 */
     @ExceptionHandler(InvalidFileTypeException.class)
+    @ResponseStatus(code = HttpStatus.BAD_REQUEST)
     public ResponseEntity<ErrorResponse> handleInvalidFileType(
     		InvalidFileTypeException ex, WebRequest request){
         ErrorResponse errorResponse = new ErrorResponse.ErrorResponseBuilder()
@@ -65,7 +68,8 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 	 * @param request the current request
 	 * @return a {@code ResponseEntity} wrapping {@code ErrorResponse}
 	 */
-	@ExceptionHandler(RuntimeException.class) 
+	@ExceptionHandler(RuntimeException.class)
+	@ResponseStatus(code = HttpStatus.INTERNAL_SERVER_ERROR)
 	protected ResponseEntity<Object>
 	handleCustomException(Exception ex, WebRequest request) {
 		ErrorResponse errorResponse = new ErrorResponse.ErrorResponseBuilder()
@@ -86,6 +90,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 	 * @return a {@code ResponseEntity} wrapping {@code ErrorResponse}
 	 */
     @Override
+    @ResponseStatus(code = HttpStatus.METHOD_NOT_ALLOWED)
 	protected ResponseEntity<Object> handleHttpRequestMethodNotSupported(HttpRequestMethodNotSupportedException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
     	ErrorResponse errorResponse = new ErrorResponse.ErrorResponseBuilder()
@@ -106,6 +111,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 	 * @return a {@code ResponseEntity} wrapping {@code ErrorResponse}
 	 */
 	@Override
+	@ResponseStatus(code = HttpStatus.BAD_REQUEST)
 	protected ResponseEntity<Object> handleBindException(BindException ex, HttpHeaders headers, HttpStatus status,
 			WebRequest request) {
 		// Get error messages
