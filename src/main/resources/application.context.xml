@@ -8,7 +8,6 @@
     xmlns:p="http://www.springframework.org/schema/p"
     xmlns:tx="http://www.springframework.org/schema/tx"
     xmlns:util="http://www.springframework.org/schema/util"
-    xmlns:mvc="http://www.springframework.org/schema/mvc"
     xsi:schemaLocation="http://www.springframework.org/schema/beans 
     http://www.springframework.org/schema/beans/spring-beans.xsd
         http://www.springframework.org/schema/aop 
@@ -22,9 +21,7 @@
         http://www.springframework.org/schema/tx 
 		http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
         http://www.springframework.org/schema/util 
-        http://www.springframework.org/schema/util/spring-util.xsd
-        http://www.springframework.org/schema/mvc
-		http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd">
+        http://www.springframework.org/schema/util/spring-util.xsd">
 		
 	<context:property-placeholder location="classpath:application.properties" />
 	
@@ -61,14 +58,5 @@
 	<bean id="folderProperties" class="me.tbandawa.api.gallery.props.FolderProperties"/>
 	
 	<bean id="openApiConfiguration" class="me.tbandawa.api.gallery.config.OpenApiConfiguration"/>
-
-	<!-- <mvc:resources order="1" location="classpath:/META-INF/resources/" mapping="/resources/**" />
-	<mvc:resources mapping="swagger-ui.html" location="classpath:/META-INF/resources/" />
-	<mvc:resources mapping="/webjars/**" location="classpath:/META-INF/resources/webjars/" />
-	<mvc:default-servlet-handler />
-	,<context:component-scan base-package="me.tbandawa.api.gallery">
-        <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller" />
-        <context:include-filter type="annotation" expression="org.springframework.web.bind.annotation.ControllerAdvice" />
-	</context:component-scan> -->
 
 </beans>
