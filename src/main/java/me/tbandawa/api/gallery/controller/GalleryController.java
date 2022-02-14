@@ -35,7 +35,9 @@ public class GalleryController {
 	@Autowired
 	private ImageService imageService;
 	
-	//create article
+	/**
+	 * Create gallery
+	 */
 	@PostMapping(value = "/gallery", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public Gallery createArticle(
 			@Valid Gallery gallery,
@@ -50,7 +52,9 @@ public class GalleryController {
 		return savedGallery;
 	}
 	
-	//get all articles
+	/**
+	 * Get all galleries
+	 */
 	@GetMapping("/gallery")
 	public List<Gallery> getGallery() {
 		return galleryService.getAllGallery().stream()
@@ -61,7 +65,9 @@ public class GalleryController {
 				.collect(Collectors.toList());
 	}
 	
-	//get single articles
+	/**
+	 * Get a single gallery
+	 */
 	@GetMapping("/gallery/{id}")
 	public Gallery getNews(@PathVariable(value = "id") Long galleryId) {
 		Gallery gallery = galleryService.getGallery(galleryId)
@@ -70,7 +76,9 @@ public class GalleryController {
 		return gallery;
 	}
 	
-	//delete article
+	/**
+	 * Delete a single gallery
+	 */
 	@DeleteMapping("/gallery/{id}")
 	public ResponseEntity<?> deleteGallery(@PathVariable(value = "id") Long galleryId) {
 	    Gallery gallery = galleryService.getGallery(galleryId)
