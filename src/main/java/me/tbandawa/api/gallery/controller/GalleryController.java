@@ -6,7 +6,6 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -29,12 +28,18 @@ import me.tbandawa.api.gallery.services.ImageService;
 @CrossOrigin(origins = "http://localhost:4200")
 public class GalleryController {
 	
-	@Autowired
 	private GalleryService galleryService;
 	
-	@Autowired
 	private ImageService imageService;
 	
+	public void setGalleryService(GalleryService galleryService) {
+		this.galleryService = galleryService;
+	}
+
+	public void setImageService(ImageService imageService) {
+		this.imageService = imageService;
+	}
+
 	/**
 	 * Create gallery
 	 */
