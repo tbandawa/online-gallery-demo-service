@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import java.time.LocalDateTime;
 
+import org.springframework.http.MediaType;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,7 @@ import org.springframework.validation.BindException;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
@@ -22,6 +24,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import me.tbandawa.api.gallery.models.ErrorResponse;
 
 @RestControllerAdvice
+@RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE) 
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 	
 	/**
@@ -70,8 +73,8 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 	 */
 	@ExceptionHandler(RuntimeException.class)
 	@ResponseStatus(code = HttpStatus.INTERNAL_SERVER_ERROR)
-	protected ResponseEntity<Object>
-	handleCustomException(Exception ex, WebRequest request) {
+	protected ResponseEntity<ErrorResponse>
+	handleCustomException(RuntimeException ex) {
 		ErrorResponse errorResponse = new ErrorResponse.ErrorResponseBuilder()
 				.withTimeStamp(LocalDateTime.now(ZoneOffset.UTC))
 				.withStatus(HttpStatus.INTERNAL_SERVER_ERROR.value())
@@ -90,7 +93,6 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 	 * @return a {@code ResponseEntity} wrapping {@code ErrorResponse}
 	 */
     @Override
-    @ResponseStatus(code = HttpStatus.METHOD_NOT_ALLOWED)
 	protected ResponseEntity<Object> handleHttpRequestMethodNotSupported(HttpRequestMethodNotSupportedException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
     	ErrorResponse errorResponse = new ErrorResponse.ErrorResponseBuilder()
@@ -111,7 +113,6 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 	 * @return a {@code ResponseEntity} wrapping {@code ErrorResponse}
 	 */
 	@Override
-	@ResponseStatus(code = HttpStatus.BAD_REQUEST)
 	protected ResponseEntity<Object> handleBindException(BindException ex, HttpHeaders headers, HttpStatus status,
 			WebRequest request) {
 		// Get error messages
