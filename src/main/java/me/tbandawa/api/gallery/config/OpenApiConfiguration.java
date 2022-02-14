@@ -12,13 +12,19 @@ public class OpenApiConfiguration {
 	@Bean
 	public OpenAPI springShopOpenAPI() {
 		return new OpenAPI()
-				.info(new Info().title("SpringShop API")
-	            .description("Spring shop sample application")
+				.info(new Info().title("Image Upload APIs")
+	            .description("<b>Spring Boot Image Uploading sample application</b><p>"
+	            		+ "Feautures:"
+	            		+ "<ul>"
+	            		+ "<li>multiple image upload</li>"
+	            		+ "<li>exception handling</li>"
+	            		+ "<li>api documentation</li>"
+	            		+ "</ul>")
 	            .version("v0.0.1")
 	            .license(new License().name("Apache 2.0").url("http://springdoc.org")))
 	            .externalDocs(new ExternalDocumentation()
-	            .description("SpringShop Wiki Documentation")
-	            .url("https://springshop.wiki.github.org/docs"));
+	            .description("GitHub Page")
+	            .url("https://github.com/tbandawa/spring-image-upload"));
 	}
 
 }
