@@ -60,9 +60,9 @@
 	
 	<bean id="folderProperties" class="me.tbandawa.api.gallery.props.FolderProperties"/>
 	
-	<!-- <bean id="swaggerConfiguration" class="me.tbandawa.api.gallery.config.SwaggerConfiguration"/>
+	<bean id="openApiConfiguration" class="me.tbandawa.api.gallery.config.OpenApiConfiguration"/>
 
-	<mvc:resources order="1" location="classpath:/META-INF/resources/" mapping="/resources/**" />
+	<!-- <mvc:resources order="1" location="classpath:/META-INF/resources/" mapping="/resources/**" />
 	<mvc:resources mapping="swagger-ui.html" location="classpath:/META-INF/resources/" />
 	<mvc:resources mapping="/webjars/**" location="classpath:/META-INF/resources/webjars/" />
 	<mvc:default-servlet-handler />
