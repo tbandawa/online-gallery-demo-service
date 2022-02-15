@@ -43,7 +43,6 @@ public class GalleryController {
 			@Valid Gallery gallery,
 			@RequestPart(value = "gallery_images", required = false) MultipartFile[] gallery_images) {
 		Gallery savedGallery = galleryService.saveGallery(gallery);
-		
 		if (gallery_images.length > 0 && !gallery_images[0].isEmpty()) {
 			savedGallery.setImages(imageService.saveImages(savedGallery.getId(), gallery_images));
 		} else {

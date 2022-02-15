@@ -4,7 +4,6 @@ import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Arrays;
 import java.util.stream.Collectors;
-
 import java.time.LocalDateTime;
 
 import org.springframework.http.MediaType;
@@ -103,7 +102,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
                 .build();
         return new ResponseEntity<>(errorResponse, HttpStatus.METHOD_NOT_ALLOWED);
 	}
-	
+   
 	/**
 	 * Handle entity field missing or invalid exception
 	 * @param ex the exception
