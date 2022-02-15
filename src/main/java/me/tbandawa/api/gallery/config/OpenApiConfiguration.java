@@ -13,13 +13,7 @@ public class OpenApiConfiguration {
 	public OpenAPI springShopOpenAPI() {
 		return new OpenAPI()
 				.info(new Info().title("Image Upload APIs")
-	            .description("<b>Spring Boot Image Uploading sample application</b><p>"
-	            		+ "Feautures:"
-	            		+ "<ul>"
-	            		+ "<li>multiple image upload</li>"
-	            		+ "<li>exception handling</li>"
-	            		+ "<li>api documentation</li>"
-	            		+ "</ul>")
+	            .description("<b>Spring Boot Image Uploading sample application</b>")
 	            .version("v0.0.1")
 	            .license(new License().name("Apache 2.0").url("http://springdoc.org")))
 	            .externalDocs(new ExternalDocumentation()
