@@ -56,5 +56,7 @@
 	</bean>
 	
 	<bean id="folderProperties" class="me.tbandawa.api.gallery.props.FolderProperties"/>
+	
+	<bean id="openApiConfiguration" class="me.tbandawa.api.gallery.config.OpenApiConfiguration"/>
 
 </beans>
