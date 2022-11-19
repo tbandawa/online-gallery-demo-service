@@ -41,7 +41,7 @@ public class GalleryController {
 	/**
 	 * Create new gallery
 	 */
-	@Operation(summary = "create new gallery", description = "send requestbody object with multipart", tags = { "gallery" })
+	@Operation(summary = "create new gallery", description = "send request-body object with multipart", tags = { "gallery" })
 	@PostMapping(value = "/gallery", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public Gallery createArticle(
 			@Valid Gallery gallery,
@@ -58,21 +58,18 @@ public class GalleryController {
 	/**
 	 * Get all galleries
 	 */
-	@Operation(summary = "get all gallaries", description = "retrieves a list of gallaries", tags = { "gallery" })
+	@Operation(summary = "get all galleries", description = "retrieves a list of galleries", tags = { "gallery" })
 	@GetMapping("/gallery")
 	public List<Gallery> getGallery() {
 		return galleryService.getAllGallery().stream()
-				.map(gallery -> {
-					gallery.setImages(imageService.getImages(gallery.getId()));
-					return gallery;
-				})
+				.peek(gallery -> gallery.setImages(imageService.getImages(gallery.getId())))
 				.collect(Collectors.toList());
 	}
 	
 	/**
 	 * Get a single gallery
 	 */
-	@Operation(summary = "get a single gallary", description = "get gallery by <b>galleryId</b>", tags = { "gallery" })
+	@Operation(summary = "get a single gallery", description = "get gallery by <b>galleryId</b>", tags = { "gallery" })
 	@GetMapping("/gallery/{id}")
 	public Gallery getNews(@PathVariable(value = "id") Long galleryId) {
 		Gallery gallery = galleryService.getGallery(galleryId)
@@ -84,7 +81,7 @@ public class GalleryController {
 	/**
 	 * Delete a single gallery
 	 */
-	@Operation(summary = "delete a single gallary", description = "delete gallery by <b>galleryId</b>", tags = { "gallery" })
+	@Operation(summary = "delete a single gallery", description = "delete gallery by <b>galleryId</b>", tags = { "gallery" })
 	@DeleteMapping("/gallery/{id}")
 	public ResponseEntity<?> deleteGallery(@PathVariable(value = "id") Long galleryId) {
 	    Gallery gallery = galleryService.getGallery(galleryId)
@@ -93,5 +90,4 @@ public class GalleryController {
 	    galleryService.deleteGallery(gallery.getId());
 	    return ResponseEntity.ok().build();
 	}
-
 }
