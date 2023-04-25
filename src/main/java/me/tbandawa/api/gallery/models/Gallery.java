@@ -26,7 +26,7 @@ public class Gallery {
     private String title;
 
 	@NotBlank(message = "Gallery description can not be empty")
-	@Lob
+	@Column(columnDefinition="TEXT")
     private String description;
 	
 	private transient List<String> images;
