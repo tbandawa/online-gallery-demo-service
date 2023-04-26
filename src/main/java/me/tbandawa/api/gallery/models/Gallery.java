@@ -29,7 +29,7 @@ public class Gallery {
 	@Column(columnDefinition="TEXT")
     private String description;
 	
-	private transient List<String> images;
+	private transient List<Images> images;
 	
     @Column(nullable = false, updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
@@ -60,11 +60,11 @@ public class Gallery {
 		this.description = description;
 	}
 
-	public List<String> getImages() {
+	public List<Images> getImages() {
 		return images;
 	}
 
-	public void setImages(List<String> images) {
+	public void setImages(List<Images> images) {
 		this.images = images;
 	}
 

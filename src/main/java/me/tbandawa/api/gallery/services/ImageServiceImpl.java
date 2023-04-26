@@ -21,6 +21,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import me.tbandawa.api.gallery.exceptions.FileStorageException;
 import me.tbandawa.api.gallery.exceptions.InvalidFileTypeException;
+import me.tbandawa.api.gallery.models.Images;
 import me.tbandawa.api.gallery.props.FolderProperties;
 
 import javax.imageio.ImageIO;
@@ -46,7 +47,7 @@ public class ImageServiceImpl implements ImageService {
 	 * @return images list of images
 	 */
 	@Override
-	public List<String> saveImages(Long galleryId, MultipartFile[] images) {
+	public List<Images> saveImages(Long galleryId, MultipartFile[] images) {
 
 		// Iterate through images and check if it's a valid image file
 		for (MultipartFile image : images)
@@ -64,8 +65,8 @@ public class ImageServiceImpl implements ImageService {
 	 * @param galleryId directory name
 	 * @return list of URIs
 	 */
-	@Override
-	public List<String> getImages(Long galleryId) {
+	/*@Override
+	public List<Images> getImages(Long galleryId) {
 		List<String> imageURIs;
 		try {
 		// Iterate folder and return its content as a list of URIs
@@ -82,7 +83,7 @@ public class ImageServiceImpl implements ImageService {
 			imageURIs = new ArrayList<String>();
 		}
 		return imageURIs;
-	}
+	}*/
 
 	/**
 	 * Delete recursively directory.
@@ -102,8 +103,9 @@ public class ImageServiceImpl implements ImageService {
 	 * @param image file to save
 	 * @return URI of the saved image
 	 */
-	private static String saveImage(Long galleryId, int imageIndex, MultipartFile image) {
-		String imageUri;
+	private static Images saveImage(Long galleryId, int imageIndex, MultipartFile image) {
+		//String imageUri;
+		Images images = new Images();
 
 		// Build image path using galleryId
 		Path imageUploadPath = Paths
@@ -127,15 +129,17 @@ public class ImageServiceImpl implements ImageService {
 		// Name the thumbnail image file by appending imageIndex to "thumbnail_"
 		String thumbnailImageName = "thumbnail_" + imageIndex + "." + imageExtension;
 
-		// Create and save thumbnail
-		saveThumbnail(imageUploadPath, thumbnailImageName, imageExtension, image);
+		// Create, save and return  thumbnail URI
+		images.setThumbnail(saveThumbnail(imageUploadPath, thumbnailImageName, imageExtension, galleryId, image));
 
 		// Save image and return URI
-		return copyImageToFileSystem(imageUploadPath, originalImageName, galleryId, image);
+		images.setImage(copyImageToFileSystem(imageUploadPath, originalImageName, galleryId, image));
+		
+		return images;
 	}
 
 	private static String copyImageToFileSystem(Path path, String imageName, Long galleryId, MultipartFile image) {
-		String imageUri;
+		String imageUri = null;
 		try {
 
 			// Copy image file storage
@@ -149,19 +153,27 @@ public class ImageServiceImpl implements ImageService {
 					.toUriString();
 
 		} catch (IOException ex) {
+			ex.printStackTrace();
 			throw new FileStorageException("Could not store image " + imageName, ex);
 		}
 		return imageUri;
 	}
 
-	private static void saveThumbnail(Path path, String imageName, String imageExtension, MultipartFile image) {
+	private static String saveThumbnail(Path path, String imageName, String imageExtension, Long galleryId, MultipartFile image) {
+		String thumbnailUri = null;
 		File imageFile = null;
 		try {
 			imageFile = convert(image);
 			BufferedImage inputImage = ImageIO.read(imageFile);
 			BufferedImage outputImage = resizeImage(inputImage, imageExtension);
 			Path targetLocation = path.resolve(imageName);
-			ImageIO.write(outputImage, imageExtension, targetLocation.toAbsolutePath().toFile());
+			if (ImageIO.write(outputImage, imageExtension, targetLocation.toAbsolutePath().toFile())) {
+				// Generate and return thumbnail URI
+				thumbnailUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+						.path(folderProperties.getImagesFolder() + File.separatorChar + galleryId + File.separatorChar)
+						.path(imageName)
+						.toUriString();
+			};
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			throw new FileStorageException("Could not save thumbnail " + imageName, ex);
@@ -173,6 +185,7 @@ public class ImageServiceImpl implements ImageService {
 			}
 
 		}
+		return thumbnailUri;
 	}
 
 	private static BufferedImage resizeImage(BufferedImage originalImage,String imageExtension) throws Exception {

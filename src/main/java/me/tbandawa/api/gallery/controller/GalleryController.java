@@ -23,6 +23,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import me.tbandawa.api.gallery.exceptions.ResourceNotFoundException;
 import me.tbandawa.api.gallery.models.Gallery;
+import me.tbandawa.api.gallery.models.Images;
 import me.tbandawa.api.gallery.services.GalleryService;
 import me.tbandawa.api.gallery.services.ImageService;
 
@@ -50,7 +51,7 @@ public class GalleryController {
 		if (gallery_images.length > 0 && !gallery_images[0].isEmpty()) {
 			savedGallery.setImages(imageService.saveImages(savedGallery.getId(), gallery_images));
 		} else {
-			savedGallery.setImages(new ArrayList<String>());
+			savedGallery.setImages(new ArrayList<Images>());
 		}
 		return savedGallery;
 	}
@@ -58,18 +59,18 @@ public class GalleryController {
 	/**
 	 * Get all galleries
 	 */
-	@Operation(summary = "get all galleries", description = "retrieves a list of galleries", tags = { "gallery" })
+	/*@Operation(summary = "get all galleries", description = "retrieves a list of galleries", tags = { "gallery" })
 	@GetMapping("/gallery")
 	public List<Gallery> getGallery() {
 		return galleryService.getAllGallery().stream()
 				.peek(gallery -> gallery.setImages(imageService.getImages(gallery.getId())))
 				.collect(Collectors.toList());
-	}
+	}*/
 	
 	/**
 	 * Get a single gallery
 	 */
-	@Operation(summary = "get a single gallery", description = "get gallery by <b>galleryId</b>", tags = { "gallery" })
+	/*@Operation(summary = "get a single gallery", description = "get gallery by <b>galleryId</b>", tags = { "gallery" })
 	@GetMapping("/gallery/{id}")
 	public Gallery getNews(@PathVariable(value = "id") Long galleryId) {
 		Gallery gallery = galleryService.getGallery(galleryId)
