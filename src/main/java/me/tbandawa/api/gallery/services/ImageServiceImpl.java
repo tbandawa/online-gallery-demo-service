@@ -85,7 +85,7 @@ public class ImageServiceImpl implements ImageService {
 			// Get number of saved images
 			int numOfImages = imageURIs.size() / 2;
 			
-			// Loop through indexes
+			// Loop throught images and sort by indexes
 			for (int i = 1; i <= numOfImages; i++){
 				
 				int imageIndex = i;
