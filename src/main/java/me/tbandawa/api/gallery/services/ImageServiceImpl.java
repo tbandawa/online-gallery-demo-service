@@ -101,7 +101,6 @@ public class ImageServiceImpl implements ImageService {
 		        		.findFirst()
 		        		.get();
 		        
-		        
 		        images.setImage(imageURI);
 		        images.setThumbnail(thumbnailURI);
 		        
