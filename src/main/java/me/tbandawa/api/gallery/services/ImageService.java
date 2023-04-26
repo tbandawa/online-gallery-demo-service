@@ -10,7 +10,7 @@ public interface ImageService {
 	
 	List<Images> saveImages(Long galleryId, MultipartFile[] images);
 	
-	//List<Images> getImages(Long galleryId);
+	List<Images> getImages(Long galleryId);
 	
 	void deleteImages(Long galleryId);
 

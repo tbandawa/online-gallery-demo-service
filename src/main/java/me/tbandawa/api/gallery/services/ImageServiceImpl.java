@@ -65,11 +65,13 @@ public class ImageServiceImpl implements ImageService {
 	 * @param galleryId directory name
 	 * @return list of URIs
 	 */
-	/*@Override
+	@Override
 	public List<Images> getImages(Long galleryId) {
 		List<String> imageURIs;
+		List<Images> imagesList = new ArrayList<Images>();
 		try {
-		// Iterate folder and return its content as a list of URIs
+			
+			// Iterate folder and return its content as a list of URIs
 			imageURIs = Files.list(Paths.get(folderProperties.getImagesFolder() + File.separatorChar + galleryId + File.separatorChar))
 		            .map(Path::toFile)
 		            .map(File::getPath)
@@ -79,11 +81,38 @@ public class ImageServiceImpl implements ImageService {
 		            		.toUriString()
 		            )
 		            .collect(Collectors.toList());
+			
+			// Get number of saved images
+			int numOfImages = imageURIs.size() / 2;
+			
+			// Loop through indexes
+			for (int i = 1; i <= numOfImages; i++){
+				
+				int imageIndex = i;
+				Images images = new Images();
+				
+		        String imageURI = imageURIs.stream()
+		        		.filter(s  -> s.contains("image_" + imageIndex))
+		        		.findFirst()
+		        		.get();
+		        
+		        String thumbnailURI = imageURIs.stream()
+		        		.filter(s  -> s.contains("thumbnail_" + imageIndex))
+		        		.findFirst()
+		        		.get();
+		        
+		        
+		        images.setImage(imageURI);
+		        images.setThumbnail(thumbnailURI);
+		        
+		        imagesList.add(images);
+		    } 
+			
 		} catch (IOException e) {
-			imageURIs = new ArrayList<String>();
+			imagesList = new ArrayList<Images>();
 		}
-		return imageURIs;
-	}*/
+		return imagesList;
+	}
 
 	/**
 	 * Delete recursively directory.
@@ -101,7 +130,7 @@ public class ImageServiceImpl implements ImageService {
 	 * @param galleryId id of the created gallery
 	 * @param imageIndex index position of the image
 	 * @param image file to save
-	 * @return URI of the saved image
+	 * @return Images of the saved image
 	 */
 	private static Images saveImage(Long galleryId, int imageIndex, MultipartFile image) {
 		//String imageUri;

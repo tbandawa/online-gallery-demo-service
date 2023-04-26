@@ -44,7 +44,7 @@ public class GalleryController {
 	 */
 	@Operation(summary = "create new gallery", description = "send request-body object with multipart", tags = { "gallery" })
 	@PostMapping(value = "/gallery", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public Gallery createArticle(
+	public Gallery createGallery(
 			@Valid Gallery gallery,
 			@RequestPart(value = "gallery_images", required = false) MultipartFile[] gallery_images) {
 		Gallery savedGallery = galleryService.saveGallery(gallery);
@@ -59,20 +59,20 @@ public class GalleryController {
 	/**
 	 * Get all galleries
 	 */
-	/*@Operation(summary = "get all galleries", description = "retrieves a list of galleries", tags = { "gallery" })
+	@Operation(summary = "get all galleries", description = "retrieves a list of galleries", tags = { "gallery" })
 	@GetMapping("/gallery")
-	public List<Gallery> getGallery() {
+	public List<Gallery> getGalleries() {
 		return galleryService.getAllGallery().stream()
 				.peek(gallery -> gallery.setImages(imageService.getImages(gallery.getId())))
 				.collect(Collectors.toList());
-	}*/
+	}
 	
 	/**
 	 * Get a single gallery
 	 */
-	/*@Operation(summary = "get a single gallery", description = "get gallery by <b>galleryId</b>", tags = { "gallery" })
+	@Operation(summary = "get a single gallery", description = "get gallery by <b>galleryId</b>", tags = { "gallery" })
 	@GetMapping("/gallery/{id}")
-	public Gallery getNews(@PathVariable(value = "id") Long galleryId) {
+	public Gallery getGallery(@PathVariable(value = "id") Long galleryId) {
 		Gallery gallery = galleryService.getGallery(galleryId)
 				.orElseThrow(() -> new ResourceNotFoundException("Gallery with id: " + galleryId + " not found"));
 		gallery.setImages(imageService.getImages(gallery.getId()));
