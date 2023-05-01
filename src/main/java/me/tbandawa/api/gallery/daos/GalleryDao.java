@@ -14,5 +14,4 @@ public interface GalleryDao {
     Gallery save(Gallery gallery);
     
     void delete(long id);
-
 }
