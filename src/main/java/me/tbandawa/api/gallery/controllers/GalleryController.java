@@ -1,4 +1,4 @@
-package me.tbandawa.api.gallery.controller;
+package me.tbandawa.api.gallery.controllers;
 
 import java.util.ArrayList;
 import java.util.List;

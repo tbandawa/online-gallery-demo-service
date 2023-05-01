@@ -14,6 +14,8 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import net.coobird.thumbnailator.Thumbnails;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,7 +24,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import me.tbandawa.api.gallery.exceptions.FileStorageException;
 import me.tbandawa.api.gallery.exceptions.InvalidFileTypeException;
 import me.tbandawa.api.gallery.models.Images;
-import me.tbandawa.api.gallery.props.FolderProperties;
 
 import javax.imageio.ImageIO;
 
@@ -33,12 +34,9 @@ import javax.imageio.ImageIO;
 public class ImageServiceImpl implements ImageService {
 	
 	private static final List<String> imageTypes = Arrays.asList("image/png", "image/jpeg", "image/jpeg", "image/gif");
-
-	private static FolderProperties folderProperties;
 	
-	public void setFolderProperties(FolderProperties folderProperties) {
-		ImageServiceImpl.folderProperties = folderProperties;
-	}
+	@Value("${gallery.images}")
+	private static String imagesFolder;
 
 	/**
 	 * Iterate through images, check if image is valid
@@ -72,7 +70,7 @@ public class ImageServiceImpl implements ImageService {
 		try {
 			
 			// Iterate folder and return its content as a list of URIs
-			imageURIs = Files.list(Paths.get(folderProperties.getImagesFolder() + File.separatorChar + galleryId + File.separatorChar))
+			imageURIs = Files.list(Paths.get(imagesFolder + File.separatorChar + galleryId + File.separatorChar))
 		            .map(Path::toFile)
 		            .map(File::getPath)
 		            .map(filePath ->
@@ -120,7 +118,7 @@ public class ImageServiceImpl implements ImageService {
 	@Override
 	public void deleteImages(Long galleryId) {
 		// Delete image folder using Spring's file utilities
-		FileSystemUtils.deleteRecursively(new File(folderProperties.getImagesFolder() + File.separatorChar + galleryId));
+		FileSystemUtils.deleteRecursively(new File(imagesFolder + File.separatorChar + galleryId));
 	}
 	
 	/**
@@ -137,7 +135,7 @@ public class ImageServiceImpl implements ImageService {
 
 		// Build image path using galleryId
 		Path imageUploadPath = Paths
-				.get(folderProperties.getImagesFolder() + File.separatorChar + galleryId + File.separatorChar)
+				.get(imagesFolder + File.separatorChar + galleryId + File.separatorChar)
 				.toAbsolutePath()
 				.normalize();
 
@@ -176,7 +174,7 @@ public class ImageServiceImpl implements ImageService {
 
 			// Generate and return image URI
 			imageUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-					.path(folderProperties.getImagesFolder() + File.separatorChar + galleryId + File.separatorChar)
+					.path(imagesFolder + File.separatorChar + galleryId + File.separatorChar)
 					.path(imageName)
 					.toUriString();
 
@@ -198,7 +196,7 @@ public class ImageServiceImpl implements ImageService {
 			if (ImageIO.write(outputImage, imageExtension, targetLocation.toAbsolutePath().toFile())) {
 				// Generate and return thumbnail URI
 				thumbnailUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-						.path(folderProperties.getImagesFolder() + File.separatorChar + galleryId + File.separatorChar)
+						.path(imagesFolder + File.separatorChar + galleryId + File.separatorChar)
 						.path(imageName)
 						.toUriString();
 			};
