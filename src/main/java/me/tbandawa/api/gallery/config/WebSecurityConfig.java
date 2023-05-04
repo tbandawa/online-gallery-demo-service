@@ -1,4 +1,4 @@
-package me.tbandawa.api.gallery.security;
+package me.tbandawa.api.gallery.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

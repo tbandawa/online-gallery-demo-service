@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,11 +14,8 @@ import me.tbandawa.api.gallery.entities.Gallery;
 @Repository
 public class GalleryDaoImpl implements GalleryDao {
 	
-	private SessionFactory sessionFactory;
-
-	public void setSessionFactory(SessionFactory sessionFactory) {
-		this.sessionFactory = sessionFactory;
-	}
+	@Autowired
+	SessionFactory sessionFactory;
 
 	@Override
 	@Transactional(readOnly = true)

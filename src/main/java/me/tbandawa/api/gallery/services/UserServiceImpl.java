@@ -91,14 +91,14 @@ public class UserServiceImpl implements UserService {
             throw new RuntimeException("User not created");
         }
 		
-		return signInUser(new LoginRequest(request.getEmail(), request.getPassword()));
+		return signInUser(new LoginRequest(request.getUsername(), request.getPassword()));
 	}
 
 	@Override
 	public AuthResponse signInUser(LoginRequest request) {
 		
 		Authentication authentication = authenticationManager.authenticate(
-		        new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
+		        new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
 
 		    SecurityContextHolder.getContext().setAuthentication(authentication);
 		    String jwt = jwtUtils.generateJwtToken(authentication);
