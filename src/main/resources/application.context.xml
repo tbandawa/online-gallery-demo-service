@@ -42,10 +42,5 @@
     	<property name="username" value="${spring.datasource.username}" />
     	<property name="password" value="${spring.datasource.password}" />
 	</bean>
-	
-	<bean id="galleryDao" class="me.tbandawa.api.gallery.daos.GalleryDaoImpl">
-  		<property name="sessionFactory" ref="sessionFactory" />
-	</bean>
-
 
 </beans>

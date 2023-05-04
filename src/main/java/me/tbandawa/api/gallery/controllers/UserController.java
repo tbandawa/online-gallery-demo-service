@@ -16,12 +16,14 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.extern.slf4j.Slf4j;
 import me.tbandawa.api.gallery.requests.LoginRequest;
 import me.tbandawa.api.gallery.requests.RegisterRequest;
 import me.tbandawa.api.gallery.responses.AuthResponse;
 import me.tbandawa.api.gallery.responses.UserResponse;
 import me.tbandawa.api.gallery.services.UserService;
 
+@Slf4j
 @RestController
 @RequestMapping("/api")
 @Tag(name = "user", description = "register, login and view user")
@@ -44,8 +46,10 @@ public class UserController {
 
 	@PostMapping("/auth/signup")
 	public ResponseEntity<AuthResponse> registerUser(@Valid @RequestBody RegisterRequest signUpRequest) {
-		AuthResponse authResponse = userService.signUpUser(signUpRequest);
-		return ResponseEntity.ok(authResponse);
+		log.info("request -> {}", signUpRequest.toString());
+		//AuthResponse authResponse = userService.signUpUser(signUpRequest);
+		//return ResponseEntity.ok(authResponse);
+		return null;
 	}
 	
 	@GetMapping("/user/{id}")

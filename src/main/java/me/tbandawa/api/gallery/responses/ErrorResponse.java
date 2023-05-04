@@ -3,37 +3,15 @@ package me.tbandawa.api.gallery.responses;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import lombok.Data;
+
+@Data
 public class ErrorResponse {
 	
 	private LocalDateTime timeStamp;
     private int status;
     private String error;
     private List<String> messages;
-    
-	public LocalDateTime getTimeStamp() {
-		return timeStamp;
-	}
-	public void setTimeStamp(LocalDateTime timeStamp) {
-		this.timeStamp = timeStamp;
-	}
-	public int getStatus() {
-		return status;
-	}
-	public void setStatus(int status) {
-		this.status = status;
-	}
-	public String getError() {
-		return error;
-	}
-	public void setError(String error) {
-		this.error = error;
-	}
-	public List<String> getMessages() {
-		return messages;
-	}
-	public void setMessages(List<String> messages) {
-		this.messages = messages;
-	}
 	
 	public static final class ErrorResponseBuilder {
     	
@@ -78,5 +56,4 @@ public class ErrorResponse {
         }
         
     }
-
 }
