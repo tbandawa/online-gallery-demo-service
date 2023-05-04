@@ -2,7 +2,7 @@ package me.tbandawa.api.gallery.daos;
 
 import java.util.Optional;
 
-import me.tbandawa.api.gallery.models.User;
+import me.tbandawa.api.gallery.entities.User;
 
 public interface UserDao {
 	Long addUser(User user);

@@ -1,4 +1,4 @@
-package me.tbandawa.api.gallery.models;
+package me.tbandawa.api.gallery.entities;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

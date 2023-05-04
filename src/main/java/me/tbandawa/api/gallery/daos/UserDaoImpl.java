@@ -8,9 +8,10 @@ import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import me.tbandawa.api.gallery.models.User;
+import me.tbandawa.api.gallery.entities.User;
 
 @Repository
+@Transactional
 public class UserDaoImpl implements UserDao {
 	
 	private SessionFactory sessionFactory;
@@ -20,21 +21,18 @@ public class UserDaoImpl implements UserDao {
 	}
 	
 	@Override
-	@Transactional
 	public Long addUser(User user) {
 		Session session = this.sessionFactory.getCurrentSession();
 		return (Long)session.save(user);
 	}
 
 	@Override
-	@Transactional(readOnly = true)
 	public Optional<User> getUser(Long id) {
 		Session session = this.sessionFactory.getCurrentSession();
 		return Optional.ofNullable(session.get(User.class, id));
 	}
 	
 	@Override
-	@Transactional(readOnly = true)
 	public Optional<User> findByUsername(String username) {
 		Session session = this.sessionFactory.getCurrentSession();
 		Query<?> query = session.createQuery("FROM User WHERE username = :username");
@@ -44,7 +42,6 @@ public class UserDaoImpl implements UserDao {
 	}
 
 	@Override
-	@Transactional(readOnly = true)
 	public Optional<User> findByEmail(String email) {
 		Session session = this.sessionFactory.getCurrentSession();
 		Query<?> query = session.createQuery("FROM User WHERE email = :email");

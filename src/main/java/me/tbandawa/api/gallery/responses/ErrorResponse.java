@@ -1,4 +1,4 @@
-package me.tbandawa.api.gallery.models;
+package me.tbandawa.api.gallery.responses;
 
 import java.time.LocalDateTime;
 import java.util.List;

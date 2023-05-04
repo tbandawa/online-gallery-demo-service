@@ -3,7 +3,7 @@ package me.tbandawa.api.gallery.services;
 import java.util.List;
 import java.util.Optional;
 
-import me.tbandawa.api.gallery.models.Gallery;
+import me.tbandawa.api.gallery.entities.Gallery;
 
 public interface GalleryService {
 	

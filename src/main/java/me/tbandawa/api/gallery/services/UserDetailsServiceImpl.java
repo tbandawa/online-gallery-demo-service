@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import me.tbandawa.api.gallery.daos.UserDao;
-import me.tbandawa.api.gallery.models.User;
+import me.tbandawa.api.gallery.entities.User;
 
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {

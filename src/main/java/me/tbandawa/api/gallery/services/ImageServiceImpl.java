@@ -21,9 +21,9 @@ import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import me.tbandawa.api.gallery.entities.Images;
 import me.tbandawa.api.gallery.exceptions.FileStorageException;
 import me.tbandawa.api.gallery.exceptions.InvalidFileTypeException;
-import me.tbandawa.api.gallery.models.Images;
 
 import javax.imageio.ImageIO;
 
@@ -36,7 +36,7 @@ public class ImageServiceImpl implements ImageService {
 	private static final List<String> imageTypes = Arrays.asList("image/png", "image/jpeg", "image/jpeg", "image/gif");
 	
 	@Value("${gallery.images}")
-	private static String imagesFolder;
+	private String imagesFolder;
 
 	/**
 	 * Iterate through images, check if image is valid
@@ -135,7 +135,7 @@ public class ImageServiceImpl implements ImageService {
 
 		// Build image path using galleryId
 		Path imageUploadPath = Paths
-				.get(imagesFolder + File.separatorChar + galleryId + File.separatorChar)
+				.get("images" + File.separatorChar + galleryId + File.separatorChar)
 				.toAbsolutePath()
 				.normalize();
 
@@ -174,7 +174,7 @@ public class ImageServiceImpl implements ImageService {
 
 			// Generate and return image URI
 			imageUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-					.path(imagesFolder + File.separatorChar + galleryId + File.separatorChar)
+					.path("images" + File.separatorChar + galleryId + File.separatorChar)
 					.path(imageName)
 					.toUriString();
 
@@ -196,7 +196,7 @@ public class ImageServiceImpl implements ImageService {
 			if (ImageIO.write(outputImage, imageExtension, targetLocation.toAbsolutePath().toFile())) {
 				// Generate and return thumbnail URI
 				thumbnailUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-						.path(imagesFolder + File.separatorChar + galleryId + File.separatorChar)
+						.path("images" + File.separatorChar + galleryId + File.separatorChar)
 						.path(imageName)
 						.toUriString();
 			};

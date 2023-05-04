@@ -11,7 +11,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @SpringBootApplication
 @EnableTransactionManagement
 @EnableJpaAuditing
-@ImportResource({ "classpath:application.context.xml" })
+@ImportResource("classpath:application.context.xml")
 public class SpringImageUploadApplication implements WebMvcConfigurer {
 
 	public static void main(String[] args) {

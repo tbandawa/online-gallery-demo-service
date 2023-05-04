@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import me.tbandawa.api.gallery.models.ErrorResponse;
+import me.tbandawa.api.gallery.responses.ErrorResponse;
 
 @RestControllerAdvice
 @RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE) 
@@ -74,11 +74,12 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 	@ResponseStatus(code = HttpStatus.INTERNAL_SERVER_ERROR)
 	protected ResponseEntity<ErrorResponse>
 	handleCustomException(RuntimeException ex) {
+		ex.printStackTrace();
 		ErrorResponse errorResponse = new ErrorResponse.ErrorResponseBuilder()
 				.withTimeStamp(LocalDateTime.now(ZoneOffset.UTC))
 				.withStatus(HttpStatus.INTERNAL_SERVER_ERROR.value())
 				.withError(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase())
-				.withMessages((List<String>) Arrays.asList(new String[] {ex.getMessage()}))
+				.withMessages((List<String>) Arrays.asList(new String[] {ex.getLocalizedMessage()}))
 				.build();
 		return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
 	}

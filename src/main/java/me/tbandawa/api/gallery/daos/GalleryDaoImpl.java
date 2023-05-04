@@ -8,7 +8,7 @@ import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import me.tbandawa.api.gallery.models.Gallery;
+import me.tbandawa.api.gallery.entities.Gallery;
 
 @Repository
 @Transactional

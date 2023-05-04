@@ -1,4 +1,4 @@
-package me.tbandawa.api.gallery.models;
+package me.tbandawa.api.gallery.entities;
 
 import java.util.Date;
 import java.util.List;

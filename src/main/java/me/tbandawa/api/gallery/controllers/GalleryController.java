@@ -21,9 +21,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import me.tbandawa.api.gallery.entities.Gallery;
+import me.tbandawa.api.gallery.entities.Images;
 import me.tbandawa.api.gallery.exceptions.ResourceNotFoundException;
-import me.tbandawa.api.gallery.models.Gallery;
-import me.tbandawa.api.gallery.models.Images;
 import me.tbandawa.api.gallery.services.GalleryService;
 import me.tbandawa.api.gallery.services.ImageService;
 

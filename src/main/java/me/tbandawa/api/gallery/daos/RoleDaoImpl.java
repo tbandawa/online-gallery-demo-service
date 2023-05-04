@@ -8,7 +8,7 @@ import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import me.tbandawa.api.gallery.models.Role;
+import me.tbandawa.api.gallery.entities.Role;
 
 @Repository
 public class RoleDaoImpl implements RoleDao {

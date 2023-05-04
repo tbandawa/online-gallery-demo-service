@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
-import me.tbandawa.api.gallery.models.Images;
+import me.tbandawa.api.gallery.entities.Images;
 
 public interface ImageService {
 	

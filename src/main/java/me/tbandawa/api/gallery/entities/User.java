@@ -1,4 +1,4 @@
-package me.tbandawa.api.gallery.models;
+package me.tbandawa.api.gallery.entities;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -13,9 +13,6 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "users", 
@@ -27,18 +24,15 @@ public class User {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
+  
+  private String firstanme;
+  
+  private String lastname;
 
-  @NotBlank
-  @Size(max = 20)
   private String username;
 
-  @NotBlank
-  @Size(max = 50)
-  @Email
   private String email;
 
-  @NotBlank
-  @Size(max = 120)
   private String password;
 
   @ManyToMany(fetch = FetchType.LAZY)
@@ -62,6 +56,22 @@ public class User {
 
   public void setId(Long id) {
     this.id = id;
+  }
+
+  public String getFirstanme() {
+	return firstanme;
+  }
+
+  public void setFirstanme(String firstanme) {
+	this.firstanme = firstanme;
+  }
+
+  public String getLastname() {
+	return lastname;
+  }
+
+  public void setLastname(String lastname) {
+	this.lastname = lastname;
   }
 
   public String getUsername() {
