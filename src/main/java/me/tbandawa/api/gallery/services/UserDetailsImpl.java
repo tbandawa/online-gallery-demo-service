@@ -3,6 +3,7 @@ package me.tbandawa.api.gallery.services;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.security.core.GrantedAuthority;
@@ -11,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import me.tbandawa.api.gallery.entities.Role;
 import me.tbandawa.api.gallery.entities.User;
 
 public class UserDetailsImpl implements UserDetails {
@@ -25,19 +27,22 @@ public class UserDetailsImpl implements UserDetails {
 	private String username;
 
 	private String email;
+	
+	private Set<Role> roles;
 
 	@JsonIgnore
 	private String password;
 
 	private Collection<? extends GrantedAuthority> authorities;
 
-	public UserDetailsImpl(Long id, String firstname, String lastname, String username, String email, String password,
+	public UserDetailsImpl(Long id, String firstname, String lastname, String username, String email, Set<Role> roles, String password,
 	      Collection<? extends GrantedAuthority> authorities) {
 		this.id = id;
 	    this.firstname = firstname;
 	    this.lastname = lastname;
 	    this.username = username;
 	    this.email = email;
+	    this.roles = roles;
 	    this.password = password;
 	    this.authorities = authorities;
 	}
@@ -53,6 +58,7 @@ public class UserDetailsImpl implements UserDetails {
 	        user.getLastname(),
 	        user.getUsername(), 
 	        user.getEmail(),
+	        user.getRoles(),
 	        user.getPassword(), 
 	        authorities
 	    );
@@ -79,6 +85,10 @@ public class UserDetailsImpl implements UserDetails {
 		return email;
 	}
 
+	public Set<Role> getRoles() {
+		return roles;
+	}
+	
 	@Override
 	public String getPassword() {
 		return password;

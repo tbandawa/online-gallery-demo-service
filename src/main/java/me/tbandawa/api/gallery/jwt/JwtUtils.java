@@ -1,6 +1,7 @@
 package me.tbandawa.api.gallery.jwt;
 
 import java.util.Date;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,6 +29,8 @@ public class JwtUtils {
 
     return Jwts.builder()
         .setSubject((userPrincipal.getUsername()))
+        .claim("user", userPrincipal.getId())
+        .claim("roles", userPrincipal.getRoles().stream().map(role -> role.getName()).collect(Collectors.toList()))
         .setIssuedAt(new Date())
         .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
         .signWith(SignatureAlgorithm.HS512, jwtSecret)
