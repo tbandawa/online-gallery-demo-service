@@ -27,19 +27,25 @@ import me.tbandawa.api.gallery.entities.Role;
 public class UserServiceImpl implements UserService {
 	
 	@Autowired
-	AuthenticationManager authenticationManager;
+	private AuthenticationManager authenticationManager;
 	
 	@Autowired
-	PasswordEncoder passwordEncoder;
+	private GalleryMapper galleryMapper;
+	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+	
+	@Autowired
+	private ImageService imageService;
 
 	@Autowired
-	JwtUtils jwtUtils;
+	private JwtUtils jwtUtils;
 	
 	@Autowired
-	UserDao userDao;
+	private UserDao userDao;
 	
 	@Autowired
-	RoleDao roleDao;
+	private RoleDao roleDao;
 
 	@Override
 	public AuthResponse signUpUser(RegisterRequest request) {
@@ -125,12 +131,17 @@ public class UserServiceImpl implements UserService {
 		User user = userDao.getUser(id)
 				.orElseThrow(() -> new RuntimeException("Error: User is not found."));
 		
+		user.getGallery().forEach(gallery -> {
+			gallery.setImages(imageService.getImages(gallery.getId()));
+		});
+		
 		return new UserResponse(
 				user.getId(),
 				user.getFirstanme(),
 				user.getLastname(),
 				user.getUsername(),
-				user.getEmail()
+				user.getEmail(),
+				galleryMapper.mapToGalleryResponse(user.getGallery())
 			);
 	}
 }

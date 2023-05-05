@@ -6,11 +6,14 @@ import java.util.List;
 import javax.persistence.*;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import lombok.Data;
+
 import org.hibernate.validator.constraints.Length;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.validation.constraints.NotBlank;
 
+@Data
 @Entity
 @Table(name = "gallery")
 @EntityListeners(AuditingEntityListener.class)
@@ -20,6 +23,9 @@ public class Gallery {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+	
+	@NotBlank
+    private Long user_id;
 	
 	@NotBlank(message = "Gallery title can not be empty")
 	@Length(max = 150, message = "Gallery title can not be longer than 150 characters")
@@ -42,6 +48,14 @@ public class Gallery {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+	
+	public Long getUserid() {
+		return user_id;
+	}
+
+	public void setUserid(Long userid) {
+		this.user_id = userid;
 	}
 
 	public String getTitle() {
