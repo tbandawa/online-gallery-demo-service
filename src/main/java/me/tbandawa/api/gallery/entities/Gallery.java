@@ -6,14 +6,11 @@ import java.util.List;
 import javax.persistence.*;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import lombok.Data;
-
 import org.hibernate.validator.constraints.Length;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.validation.constraints.NotBlank;
 
-@Data
 @Entity
 @Table(name = "gallery")
 @EntityListeners(AuditingEntityListener.class)
@@ -24,7 +21,6 @@ public class Gallery {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 	
-	@NotBlank
     private Long user_id;
 	
 	@NotBlank(message = "Gallery title can not be empty")

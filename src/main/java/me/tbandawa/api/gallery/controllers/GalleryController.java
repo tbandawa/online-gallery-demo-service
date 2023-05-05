@@ -9,6 +9,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,6 +27,7 @@ import me.tbandawa.api.gallery.entities.Images;
 import me.tbandawa.api.gallery.exceptions.ResourceNotFoundException;
 import me.tbandawa.api.gallery.services.GalleryService;
 import me.tbandawa.api.gallery.services.ImageService;
+import me.tbandawa.api.gallery.services.UserDetailsImpl;
 
 @RestController
 @RequestMapping("/api")
@@ -45,8 +47,13 @@ public class GalleryController {
 	@Operation(summary = "create new gallery", description = "send request-body object with multipart", tags = { "gallery" })
 	@PostMapping(value = "/gallery", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public Gallery createGallery(
+			Authentication authentication,
 			@Valid Gallery gallery,
 			@RequestPart(value = "gallery_images", required = false) MultipartFile[] gallery_images) {
+		
+		UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+		gallery.setUserid(userDetails.getId());
+		
 		Gallery savedGallery = galleryService.saveGallery(gallery);
 		if (gallery_images.length > 0 && !gallery_images[0].isEmpty()) {
 			savedGallery.setImages(imageService.saveImages(savedGallery.getId(), gallery_images));

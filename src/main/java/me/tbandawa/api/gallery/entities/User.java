@@ -17,9 +17,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
-import lombok.Data;
-
-@Data
 @Entity
 @Table(name = "users", 
     uniqueConstraints = { 
