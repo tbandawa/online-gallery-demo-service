@@ -22,9 +22,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import me.tbandawa.api.gallery.entities.Gallery;
 import me.tbandawa.api.gallery.entities.Images;
-import me.tbandawa.api.gallery.exceptions.ResourceNotFoundException;
+import me.tbandawa.api.gallery.requests.GalleryRequest;
+import me.tbandawa.api.gallery.responses.GalleryResponse;
 import me.tbandawa.api.gallery.services.GalleryService;
 import me.tbandawa.api.gallery.services.ImageService;
 import me.tbandawa.api.gallery.services.UserDetailsImpl;
@@ -46,15 +46,16 @@ public class GalleryController {
 	 */
 	@Operation(summary = "create new gallery", description = "send request-body object with multipart", tags = { "gallery" })
 	@PostMapping(value = "/gallery", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public Gallery createGallery(
+	public GalleryResponse createGallery(
 			Authentication authentication,
-			@Valid Gallery gallery,
+			@Valid GalleryRequest gallery,
 			@RequestPart(value = "gallery_images", required = false) MultipartFile[] gallery_images) {
 		
 		UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-		gallery.setUserid(userDetails.getId());
 		
-		Gallery savedGallery = galleryService.saveGallery(gallery);
+		gallery.setUserId(userDetails.getId());
+		
+		GalleryResponse savedGallery = galleryService.saveGallery(gallery);
 		if (gallery_images.length > 0 && !gallery_images[0].isEmpty()) {
 			savedGallery.setImages(imageService.saveImages(savedGallery.getId(), gallery_images));
 		} else {
@@ -68,7 +69,7 @@ public class GalleryController {
 	 */
 	@Operation(summary = "get all galleries", description = "retrieves a list of galleries", tags = { "gallery" })
 	@GetMapping("/gallery")
-	public List<Gallery> getGalleries() {
+	public List<GalleryResponse> getGalleries() {
 		return galleryService.getAllGallery().stream()
 				.peek(gallery -> gallery.setImages(imageService.getImages(gallery.getId())))
 				.collect(Collectors.toList());
@@ -79,9 +80,8 @@ public class GalleryController {
 	 */
 	@Operation(summary = "get a single gallery", description = "get gallery by <b>galleryId</b>", tags = { "gallery" })
 	@GetMapping("/gallery/{id}")
-	public Gallery getGallery(@PathVariable(value = "id") Long galleryId) {
-		Gallery gallery = galleryService.getGallery(galleryId)
-				.orElseThrow(() -> new ResourceNotFoundException("Gallery with id: " + galleryId + " not found"));
+	public GalleryResponse getGallery(@PathVariable(value = "id") Long galleryId) {
+		GalleryResponse gallery = galleryService.getGallery(galleryId);
 		gallery.setImages(imageService.getImages(gallery.getId()));
 		return gallery;
 	}
@@ -92,8 +92,7 @@ public class GalleryController {
 	@Operation(summary = "delete a single gallery", description = "delete gallery by <b>galleryId</b>", tags = { "gallery" })
 	@DeleteMapping("/gallery/{id}")
 	public ResponseEntity<?> deleteGallery(@PathVariable(value = "id") Long galleryId) {
-	    Gallery gallery = galleryService.getGallery(galleryId)
-	    		.orElseThrow(() -> new ResourceNotFoundException("Gallery with id: " + galleryId + " not found"));
+		GalleryResponse gallery = galleryService.getGallery(galleryId);
 	    imageService.deleteImages(galleryId);
 	    galleryService.deleteGallery(gallery.getId());
 	    return ResponseEntity.ok().build();

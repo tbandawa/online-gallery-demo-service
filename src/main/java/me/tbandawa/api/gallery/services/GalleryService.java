@@ -1,17 +1,17 @@
 package me.tbandawa.api.gallery.services;
 
 import java.util.List;
-import java.util.Optional;
 
-import me.tbandawa.api.gallery.entities.Gallery;
+import me.tbandawa.api.gallery.requests.GalleryRequest;
+import me.tbandawa.api.gallery.responses.GalleryResponse;
 
 public interface GalleryService {
 	
-	Gallery saveGallery(Gallery gallery);
+	GalleryResponse saveGallery(GalleryRequest galleryRequest);
 	
-	List<Gallery> getAllGallery();
+	List<GalleryResponse> getAllGallery();
 	
-	Optional<Gallery> getGallery(long id);
+	GalleryResponse getGallery(long id);
 	
 	void deleteGallery(long id);
 
