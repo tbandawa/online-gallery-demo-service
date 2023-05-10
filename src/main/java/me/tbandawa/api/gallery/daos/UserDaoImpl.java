@@ -50,4 +50,11 @@ public class UserDaoImpl implements UserDao {
 		User results = (User)query.uniqueResult();
 		return results == null? Optional.empty() : Optional.of(results);
 	}
+
+	@Override
+	@Transactional
+	public void editUser(User user) {
+		Session session = this.sessionFactory.getCurrentSession();
+		session.update(user);
+	}
 }

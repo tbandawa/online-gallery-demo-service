@@ -6,6 +6,7 @@ import me.tbandawa.api.gallery.entities.User;
 
 public interface UserDao {
 	Long addUser(User user);
+	void editUser(User user);
 	Optional<User> getUser(Long id);
 	Optional<User> findByUsername(String username);
 	Optional<User> findByEmail(String email);

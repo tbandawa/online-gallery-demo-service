@@ -11,6 +11,8 @@ import lombok.Data;
 @Data
 public class RegisterRequest {
 	
+	private Long userId;
+	
 	@NotBlank
 	@Size(max = 50)
 	private String firstname;

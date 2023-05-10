@@ -124,6 +124,37 @@ public class UserServiceImpl implements UserService {
 			);
 		
 	}
+	
+	@Override
+	public UserResponse editUserProfile(RegisterRequest request) {
+		
+		userDao.findByEmail(request.getEmail()).ifPresent(user -> {
+			throw new RuntimeException("Email alread exixts");
+		});
+		
+		userDao.findByUsername(request.getEmail()).ifPresent(user -> {
+			throw new RuntimeException("Username alread exixts");
+		});
+		
+		User user = new User();
+		user.setId(request.getUserId());
+		user.setFirstanme(request.getFirstname());
+		user.setLastname(request.getLastname());
+		user.setUsername(request.getUsername());
+		user.setEmail(request.getEmail());
+		user.setPassword(passwordEncoder.encode(request.getPassword()));
+		
+		userDao.editUser(user);
+		
+		return new UserResponse(
+				request.getUserId(),
+				request.getFirstname(),
+				request.getLastname(),
+				request.getUsername(),
+				request.getEmail(),
+				galleryMapper.mapToGalleryResponse(user.getGallery())
+			);
+	}
 
 	@Override
 	public UserResponse getUserProfile(Long id) {
