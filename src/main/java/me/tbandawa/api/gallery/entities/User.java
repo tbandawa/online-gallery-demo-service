@@ -17,6 +17,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import lombok.Data;
+
+@Data
 @Entity
 @Table(name = "users", 
     uniqueConstraints = { 
@@ -29,7 +32,7 @@ public class User {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
   
-	private String firstanme;
+	private String firstname;
   
 	private String lastname;
 
@@ -47,8 +50,7 @@ public class User {
   
   @OneToMany(
 	        fetch = FetchType.EAGER,
-	        cascade = CascadeType.ALL,
-	        orphanRemoval = true
+	        cascade = CascadeType.ALL
 	    )
 	    @JoinColumn(name = "user_id")
   private List<Gallery> gallery;
@@ -70,12 +72,12 @@ public class User {
     this.id = id;
   }
 
-  public String getFirstanme() {
-	return firstanme;
+  public String getFirstname() {
+	return firstname;
   }
 
-  public void setFirstanme(String firstanme) {
-	this.firstanme = firstanme;
+  public void setFirstname(String firstname) {
+	this.firstname = firstname;
   }
 
   public String getLastname() {

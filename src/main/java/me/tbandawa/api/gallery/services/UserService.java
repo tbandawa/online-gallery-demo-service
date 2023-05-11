@@ -8,6 +8,6 @@ import me.tbandawa.api.gallery.responses.UserResponse;
 public interface UserService {
 	AuthResponse signUpUser(RegisterRequest request);
     AuthResponse signInUser(LoginRequest request);
-    UserResponse editUserProfile(RegisterRequest request);
+    AuthResponse editUserProfile(RegisterRequest request);
     UserResponse getUserProfile(Long id);
 }

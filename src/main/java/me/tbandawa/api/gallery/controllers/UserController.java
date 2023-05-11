@@ -52,7 +52,7 @@ public class UserController {
 	}
 	
 	@PutMapping("/user")
-    public ResponseEntity<UserResponse> editProfile(
+    public ResponseEntity<AuthResponse> editProfile(
     		Authentication authentication,
     		@Valid @RequestBody RegisterRequest registerRequest) {
 		

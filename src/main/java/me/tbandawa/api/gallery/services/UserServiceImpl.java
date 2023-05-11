@@ -50,12 +50,16 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public AuthResponse signUpUser(RegisterRequest request) {
 		
+		userDao.findByUsername(request.getUsername()).ifPresent(user -> {
+			throw new RuntimeException("Username alread exixts");
+		});
+		
 		userDao.findByEmail(request.getEmail()).ifPresent(user -> {
 			throw new RuntimeException("Email alread exixts");
 		});
 		
 		User user = new User();
-		user.setFirstanme(request.getFirstname());
+		user.setFirstname(request.getFirstname());
 		user.setLastname(request.getLastname());
 		user.setUsername(request.getUsername());
 		user.setEmail(request.getEmail());
@@ -122,38 +126,32 @@ public class UserServiceImpl implements UserService {
 				userDetails.getEmail(),
 				roles
 			);
-		
 	}
 	
 	@Override
-	public UserResponse editUserProfile(RegisterRequest request) {
+	public AuthResponse editUserProfile(RegisterRequest request) {
+		
+		userDao.findByUsername(request.getUsername()).ifPresent(user -> {
+			throw new RuntimeException("Username alread exixts");
+		});
 		
 		userDao.findByEmail(request.getEmail()).ifPresent(user -> {
 			throw new RuntimeException("Email alread exixts");
 		});
 		
-		userDao.findByUsername(request.getEmail()).ifPresent(user -> {
-			throw new RuntimeException("Username alread exixts");
-		});
-		
 		User user = new User();
 		user.setId(request.getUserId());
-		user.setFirstanme(request.getFirstname());
+		user.setFirstname(request.getFirstname());
 		user.setLastname(request.getLastname());
 		user.setUsername(request.getUsername());
 		user.setEmail(request.getEmail());
 		user.setPassword(passwordEncoder.encode(request.getPassword()));
 		
-		userDao.editUser(user);
+		if (userDao.editUser(user) == 0) {
+			throw new RuntimeException("Could not save changes");
+		}
 		
-		return new UserResponse(
-				request.getUserId(),
-				request.getFirstname(),
-				request.getLastname(),
-				request.getUsername(),
-				request.getEmail(),
-				galleryMapper.mapToGalleryResponse(user.getGallery())
-			);
+		return signInUser(new LoginRequest(request.getUsername(), request.getPassword()));
 	}
 
 	@Override
@@ -168,7 +166,7 @@ public class UserServiceImpl implements UserService {
 		
 		return new UserResponse(
 				user.getId(),
-				user.getFirstanme(),
+				user.getFirstname(),
 				user.getLastname(),
 				user.getUsername(),
 				user.getEmail(),
