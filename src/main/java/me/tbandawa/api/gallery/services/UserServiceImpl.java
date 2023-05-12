@@ -124,7 +124,8 @@ public class UserServiceImpl implements UserService {
 				userDetails.getLastname(),
 				userDetails.getUsername(),
 				userDetails.getEmail(),
-				roles
+				roles,
+				imageService.getProfilePhoto(userDetails.getId())
 			);
 	}
 	
@@ -170,7 +171,8 @@ public class UserServiceImpl implements UserService {
 				user.getLastname(),
 				user.getUsername(),
 				user.getEmail(),
-				galleryMapper.mapToGalleryResponse(user.getGallery())
+				galleryMapper.mapToGalleryResponse(user.getGallery()),
+				imageService.getProfilePhoto(user.getId())
 			);
 	}
 }

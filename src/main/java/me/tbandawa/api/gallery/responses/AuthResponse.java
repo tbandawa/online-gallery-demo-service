@@ -4,6 +4,7 @@ import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import me.tbandawa.api.gallery.entities.Images;
 
 @Data
 @AllArgsConstructor
@@ -16,4 +17,5 @@ public class AuthResponse {
 	private String username;
 	private String email;
 	private List<String> roles;
+	private Images profilePhoto;
 }

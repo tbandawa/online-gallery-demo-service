@@ -108,8 +108,8 @@ public class ImageServiceImpl implements ImageService {
 		        imagesList.add(images);
 		    } 
 			
-		} catch (IOException e) {
-			imagesList = new ArrayList<Images>();
+		} catch (IOException ex) {
+			ex.printStackTrace();
 		}
 		return imagesList;
 	}
@@ -125,8 +125,35 @@ public class ImageServiceImpl implements ImageService {
 
 	@Override
 	public Images getProfilePhoto(Long galleryId) {
-		// TODO Auto-generated method stub
-		return null;
+		List<String> imageURIs;
+		Images images = new Images();
+		try {
+			imageURIs = Files.list(Paths.get(photosFolder + File.separatorChar + galleryId + File.separatorChar))
+		            .map(Path::toFile)
+		            .map(File::getPath)
+		            .map(filePath ->
+		            	ServletUriComponentsBuilder.fromCurrentContextPath()
+		            		.path(filePath)
+		            		.toUriString()
+		            )
+		            .collect(Collectors.toList());
+			
+			String imageURI = imageURIs.stream()
+	        		.filter(s  -> s.contains("image"))
+	        		.findFirst()
+	        		.get();
+	        
+	        String thumbnailURI = imageURIs.stream()
+	        		.filter(s  -> s.contains("thumbnail"))
+	        		.findFirst()
+	        		.get();
+	        
+	        images.setImage(imageURI);
+	        images.setThumbnail(thumbnailURI);
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
+		return images;
 	}
 
 	/**
@@ -180,14 +207,6 @@ public class ImageServiceImpl implements ImageService {
 		images.setImage(copyImageToFileSystem(imageUploadPath, originalImageName, galleryId, image, folderName));
 		
 		return images;
-	}
-	
-	private static String createFileName(String fileName, String imageExtension, int imageIndex) {
-		if (imageIndex == 0) {
-			return fileName.substring(0, fileName.length() - 1) + "." + imageExtension;
-		} else {
-			return fileName + imageIndex + "." + imageExtension;
-		}
 	}
 
 	private static String copyImageToFileSystem(Path path, String imageName, Long galleryId, MultipartFile image, String folderName) {
@@ -263,5 +282,13 @@ public class ImageServiceImpl implements ImageService {
 			convFile = null;
 		}
 		return convFile;
+	}
+	
+	private static String createFileName(String fileName, String imageExtension, int imageIndex) {
+		if (imageIndex == 0) {
+			return fileName.substring(0, fileName.length() - 1) + "." + imageExtension;
+		} else {
+			return fileName + imageIndex + "." + imageExtension;
+		}
 	}
 }
