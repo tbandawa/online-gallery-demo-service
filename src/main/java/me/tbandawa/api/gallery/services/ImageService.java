@@ -11,5 +11,5 @@ public interface ImageService {
 	List<Images> getImages(Long galleryId);
 	void deleteImages(Long galleryId);
 	Images saveProfilePhoto(Long galleryId, MultipartFile photo);
-	Images getProfilePhoto(Long galleryId);
+	Images getProfilePhoto(Long userId);
 }

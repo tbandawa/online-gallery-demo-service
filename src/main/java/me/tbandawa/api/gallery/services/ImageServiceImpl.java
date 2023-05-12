@@ -37,6 +37,9 @@ public class ImageServiceImpl implements ImageService {
 	
 	@Value("${gallery.images}")
 	private String imagesFolder;
+	
+	@Value("${gallery.photos}")
+	private String photosFolder;
 
 	/**
 	 * Iterate through images, check if image is valid
@@ -54,7 +57,7 @@ public class ImageServiceImpl implements ImageService {
 
 		// For save each image and return its URI relative to the server
 		return IntStream.range(0, images.length)
-		         .mapToObj(i -> saveImage(galleryId, (i + 1), images[i]))
+		         .mapToObj(i -> saveImage(galleryId, (i + 1), images[i], imagesFolder))
 		         .collect(Collectors.toList());
 	}
 
@@ -110,6 +113,21 @@ public class ImageServiceImpl implements ImageService {
 		}
 		return imagesList;
 	}
+	
+	@Override
+	public Images saveProfilePhoto(Long userId, MultipartFile photo) {
+		// Check if photo is a valid image file
+		if(!imageTypes.contains(photo.getContentType()))
+			throw new InvalidFileTypeException(photo.getOriginalFilename() + " is not a valid image.");
+		
+		return saveImage(userId, 0, photo, photosFolder);
+	}
+
+	@Override
+	public Images getProfilePhoto(Long galleryId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 	/**
 	 * Delete recursively directory.
@@ -129,13 +147,13 @@ public class ImageServiceImpl implements ImageService {
 	 * @param image file to save
 	 * @return Images of the saved image
 	 */
-	private static Images saveImage(Long galleryId, int imageIndex, MultipartFile image) {
+	private static Images saveImage(Long galleryId, int imageIndex, MultipartFile image, String folderName) {
 		//String imageUri;
 		Images images = new Images();
 
 		// Build image path using galleryId
 		Path imageUploadPath = Paths
-				.get("images" + File.separatorChar + galleryId + File.separatorChar)
+				.get(folderName + File.separatorChar + galleryId + File.separatorChar)
 				.toAbsolutePath()
 				.normalize();
 
@@ -150,21 +168,29 @@ public class ImageServiceImpl implements ImageService {
 		String imageExtension = Objects.requireNonNull(image.getOriginalFilename()).split("\\.")[1];
 
 		// Name the original image file by appending imageIndex to "image_"
-		String originalImageName = "image_" + imageIndex + "." + imageExtension;
+		String originalImageName = createFileName("image_", imageExtension, imageIndex);
 
 		// Name the thumbnail image file by appending imageIndex to "thumbnail_"
-		String thumbnailImageName = "thumbnail_" + imageIndex + "." + imageExtension;
+		String thumbnailImageName = createFileName("thumbnail_", imageExtension, imageIndex);
 
 		// Create, save and return  thumbnail URI
-		images.setThumbnail(saveThumbnail(imageUploadPath, thumbnailImageName, imageExtension, galleryId, image));
+		images.setThumbnail(saveThumbnail(imageUploadPath, thumbnailImageName, imageExtension, galleryId, image, folderName));
 
 		// Save image and return URI
-		images.setImage(copyImageToFileSystem(imageUploadPath, originalImageName, galleryId, image));
+		images.setImage(copyImageToFileSystem(imageUploadPath, originalImageName, galleryId, image, folderName));
 		
 		return images;
 	}
+	
+	private static String createFileName(String fileName, String imageExtension, int imageIndex) {
+		if (imageIndex == 0) {
+			return fileName.substring(0, fileName.length() - 1) + "." + imageExtension;
+		} else {
+			return fileName + imageIndex + "." + imageExtension;
+		}
+	}
 
-	private static String copyImageToFileSystem(Path path, String imageName, Long galleryId, MultipartFile image) {
+	private static String copyImageToFileSystem(Path path, String imageName, Long galleryId, MultipartFile image, String folderName) {
 		String imageUri = null;
 		try {
 
@@ -174,7 +200,7 @@ public class ImageServiceImpl implements ImageService {
 
 			// Generate and return image URI
 			imageUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-					.path("images" + File.separatorChar + galleryId + File.separatorChar)
+					.path(folderName + File.separatorChar + galleryId + File.separatorChar)
 					.path(imageName)
 					.toUriString();
 
@@ -185,7 +211,7 @@ public class ImageServiceImpl implements ImageService {
 		return imageUri;
 	}
 
-	private static String saveThumbnail(Path path, String imageName, String imageExtension, Long galleryId, MultipartFile image) {
+	private static String saveThumbnail(Path path, String imageName, String imageExtension, Long galleryId, MultipartFile image, String folderName) {
 		String thumbnailUri = null;
 		File imageFile = null;
 		try {
@@ -196,7 +222,7 @@ public class ImageServiceImpl implements ImageService {
 			if (ImageIO.write(outputImage, imageExtension, targetLocation.toAbsolutePath().toFile())) {
 				// Generate and return thumbnail URI
 				thumbnailUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-						.path("images" + File.separatorChar + galleryId + File.separatorChar)
+						.path(folderName + File.separatorChar + galleryId + File.separatorChar)
 						.path(imageName)
 						.toUriString();
 			};
