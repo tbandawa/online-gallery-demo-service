@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import me.tbandawa.api.gallery.entities.Images;
 import me.tbandawa.api.gallery.requests.LoginRequest;
@@ -32,7 +33,7 @@ import me.tbandawa.api.gallery.services.UserService;
 
 @RestController
 @RequestMapping("/api")
-@Tag(name = "user", description = "register, login and view user")
+@Tag(name = "user", description = "register, login, edit and view user")
 @CrossOrigin(origins = "http://localhost:4200")
 public class UserController {
 	
@@ -42,6 +43,7 @@ public class UserController {
 	@Autowired
 	ImageService imageService;
 	
+	@Operation(summary = "login user", description = "log in user using usernamr and email", tags = { "user" })
 	@PostMapping("/auth/signin")
 	public ResponseEntity<AuthResponse> signInUser(@Valid @RequestBody LoginRequest loginRequest) {
 		AuthResponse authResponse = userService.signInUser(loginRequest);
@@ -53,12 +55,14 @@ public class UserController {
 		return ResponseEntity.created(profileUri).body(authResponse);
 	}
 
+	@Operation(summary = "register user", description = "register user with request-body", tags = { "user" })
 	@PostMapping("/auth/signup")
 	public ResponseEntity<AuthResponse> registerUser(@Valid @RequestBody RegisterRequest registerRequest) {
 		AuthResponse authResponse = userService.signUpUser(registerRequest);
 		return ResponseEntity.ok(authResponse);
 	}
 	
+	@Operation(summary = "edit user details", description = "edit user info with request-body", tags = { "user" })
 	@PutMapping("/user")
     public ResponseEntity<AuthResponse> editProfile(
     		Authentication authentication,
@@ -69,6 +73,7 @@ public class UserController {
         return ResponseEntity.accepted().body(userService.editUserProfile(registerRequest));
     }
 	
+	@Operation(summary = "upload user photo", description = "upload user photo using multipart", tags = { "user" })
 	@PostMapping(value = "/profile", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<Images> uploadProfilePhoto(
 			Authentication authentication,
@@ -79,6 +84,7 @@ public class UserController {
 		return ResponseEntity.ok().body(imageService.saveProfilePhoto(userDetails.getId(), profile_photo));
 	}
 	
+	@Operation(summary = "get user profile", description = "get user info by id", tags = { "user" })
 	@GetMapping("/user/{id}")
     public ResponseEntity<UserResponse> getProfile(@PathVariable Long id) {
         return ResponseEntity.ok().body(userService.getUserProfile(id));
