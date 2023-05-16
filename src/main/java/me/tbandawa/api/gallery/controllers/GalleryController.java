@@ -76,6 +76,17 @@ public class GalleryController {
 	}
 	
 	/**
+	 * Search galleries
+	 */
+	@Operation(summary = "searches galleries", description = "retrieves a list of searched galleries", tags = { "gallery" })
+	@GetMapping("/search/{query}")
+	public List<GalleryResponse> searchGalleries(@PathVariable(value = "query") String query) {
+		return galleryService.searchGallery(query).stream()
+				.peek(gallery -> gallery.setImages(imageService.getImages(gallery.getId())))
+				.collect(Collectors.toList());
+	}
+	
+	/**
 	 * Get a single gallery
 	 */
 	@Operation(summary = "get a single gallery", description = "get gallery by <b>galleryId</b>", tags = { "gallery" })

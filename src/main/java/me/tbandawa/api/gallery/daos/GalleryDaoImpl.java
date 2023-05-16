@@ -59,7 +59,7 @@ public class GalleryDaoImpl implements GalleryDao {
 	            .keyword()
 	            .wildcard()
 	            .onFields("title", "description")
-	            .matching("${query}*")
+	            .matching(query + "*")
 	            .createQuery();
 		FullTextQuery jpaQuery = fullTextEntityManager.createFullTextQuery(searchQuery, Gallery.class);
         return (List<Gallery>)jpaQuery.getResultList();
