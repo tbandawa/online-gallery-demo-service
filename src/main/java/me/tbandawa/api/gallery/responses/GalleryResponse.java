@@ -10,14 +10,10 @@ import me.tbandawa.api.gallery.entities.Images;
 @Data
 @AllArgsConstructor
 public class GalleryResponse {
-
     private Long id;
-	
     private String title;
-
     private String description;
-	
 	private List<Images> images;
-	
     private Date created;
+    private Long userId;
 }
