@@ -30,6 +30,11 @@ public class GalleryServiceImpl implements GalleryService {
 	public List<GalleryResponse> getAllGallery() {
 		return galleryMapper.mapToGalleryResponse(galleryDao.getAll());
 	}
+	
+	@Override
+	public List<GalleryResponse> searchGallery(String query) {
+		return galleryMapper.mapToGalleryResponse(galleryDao.searchGallery(query));
+	}
 
 	@Override
 	public GalleryResponse getGallery(long id) {
@@ -42,5 +47,4 @@ public class GalleryServiceImpl implements GalleryService {
 	public void deleteGallery(long id) {
 		this.galleryDao.delete(id);
 	}
-
 }
