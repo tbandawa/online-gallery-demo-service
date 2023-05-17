@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import me.tbandawa.api.gallery.entities.Images;
 import me.tbandawa.api.gallery.requests.GalleryRequest;
@@ -31,6 +32,7 @@ import me.tbandawa.api.gallery.services.UserDetailsImpl;
 
 @RestController
 @RequestMapping("/api")
+@SecurityRequirement(name = "Bearer Authentication")
 @Tag(name = "gallery", description = "upload, view, delete APIs")
 @CrossOrigin(origins = "http://localhost:4200")
 public class GalleryController {
