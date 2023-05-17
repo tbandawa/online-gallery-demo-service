@@ -15,7 +15,6 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
@@ -32,8 +31,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 	 * @param request the current request
 	 * @return a {@code ResponseEntity} wrapping {@code ErrorResponse}
 	 */
-    @ExceptionHandler(ResourceNotFoundException.class)
-    @ResponseStatus(code = HttpStatus.NOT_FOUND)
+    /*@ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleResourceNotFound(
     		ResourceNotFoundException ex, WebRequest request){
         ErrorResponse errorResponse = new ErrorResponse.ErrorResponseBuilder()
@@ -43,7 +41,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
                 .withMessages((List<String>) Arrays.asList(new String[] {ex.getMessage()}))
                 .build();
         return new ResponseEntity<ErrorResponse>(errorResponse, HttpStatus.NOT_FOUND);
-    }
+    }*/
     
 	/**
 	 * Handle invalid file type exception
@@ -51,8 +49,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 	 * @param request the current request
 	 * @return a {@code ResponseEntity} wrapping {@code ErrorResponse}
 	 */
-    @ExceptionHandler(InvalidFileTypeException.class)
-    @ResponseStatus(code = HttpStatus.BAD_REQUEST)
+    /*@ExceptionHandler(InvalidFileTypeException.class)
     public ResponseEntity<ErrorResponse> handleInvalidFileType(
     		InvalidFileTypeException ex, WebRequest request){
         ErrorResponse errorResponse = new ErrorResponse.ErrorResponseBuilder()
@@ -62,7 +59,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
                 .withMessages((List<String>) Arrays.asList(new String[] {ex.getMessage()}))
                 .build();
         return new ResponseEntity<ErrorResponse>(errorResponse, HttpStatus.BAD_REQUEST);
-    }
+    }*/
     
 	/**
 	 * Handle unfinished operation exception
@@ -70,8 +67,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 	 * @param request the current request
 	 * @return a {@code ResponseEntity} wrapping {@code ErrorResponse}
 	 */
-    @ExceptionHandler(NotProcessedException.class)
-    @ResponseStatus(code = HttpStatus.BAD_REQUEST)
+    /*@ExceptionHandler(NotProcessedException.class)
     public ResponseEntity<ErrorResponse> handleNotProcessed(
     		NotProcessedException ex, WebRequest request){
         ErrorResponse errorResponse = new ErrorResponse.ErrorResponseBuilder()
@@ -81,7 +77,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
                 .withMessages((List<String>) Arrays.asList(new String[] {ex.getMessage()}))
                 .build();
         return new ResponseEntity<ErrorResponse>(errorResponse, HttpStatus.UNPROCESSABLE_ENTITY);
-    }
+    }*/
     
 	/**
 	 * Handle internal system errors
@@ -89,7 +85,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 	 * @param request the current request
 	 * @return a {@code ResponseEntity} wrapping {@code ErrorResponse}
 	 */
-	@ExceptionHandler(RuntimeException.class)
+	/*@ExceptionHandler(RuntimeException.class)
 	@ResponseStatus(code = HttpStatus.INTERNAL_SERVER_ERROR)
 	protected ResponseEntity<ErrorResponse>
 	handleCustomException(RuntimeException ex) {
@@ -101,7 +97,26 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 				.withMessages((List<String>) Arrays.asList(new String[] {ex.getLocalizedMessage()}))
 				.build();
 		return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
-	}
+	}*/
+	/**
+	 * Handle gallery exceptions
+	 * @param ex the exception
+	 * @param status code
+	 * @return a {@code ResponseEntity} wrapping {@code ErrorResponse}
+	 */
+	@ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleGalleryExceptions(
+    		RuntimeException ex, HttpStatus status){
+	
+        ErrorResponse errorResponse = new ErrorResponse.ErrorResponseBuilder()
+                .withTimeStamp(LocalDateTime.now(ZoneOffset.UTC))
+                .withStatus(status.value())
+                .withError(status.getReasonPhrase())
+                .withMessages((List<String>) Arrays.asList(new String[] {ex.getMessage()}))
+                .build();
+        
+        return new ResponseEntity<ErrorResponse>(errorResponse, status);
+    }
 	
 	/**
 	 * Handle method not supported exception
@@ -134,7 +149,6 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 	@Override
 	protected ResponseEntity<Object> handleBindException(BindException ex, HttpHeaders headers, HttpStatus status,
 			WebRequest request) {
-		// Get error messages
 		List<String> messages = ex.getBindingResult().getAllErrors().stream()
 				.map(ObjectError::getDefaultMessage)
 				.collect(Collectors.toList());
