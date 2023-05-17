@@ -65,6 +65,25 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     }
     
 	/**
+	 * Handle unfinished operation exception
+	 * @param ex the exception
+	 * @param request the current request
+	 * @return a {@code ResponseEntity} wrapping {@code ErrorResponse}
+	 */
+    @ExceptionHandler(NotProcessedException.class)
+    @ResponseStatus(code = HttpStatus.BAD_REQUEST)
+    public ResponseEntity<ErrorResponse> handleNotProcessed(
+    		NotProcessedException ex, WebRequest request){
+        ErrorResponse errorResponse = new ErrorResponse.ErrorResponseBuilder()
+                .withTimeStamp(LocalDateTime.now(ZoneOffset.UTC))
+                .withStatus(HttpStatus.UNPROCESSABLE_ENTITY.value())
+                .withError(HttpStatus.UNPROCESSABLE_ENTITY.getReasonPhrase())
+                .withMessages((List<String>) Arrays.asList(new String[] {ex.getMessage()}))
+                .build();
+        return new ResponseEntity<ErrorResponse>(errorResponse, HttpStatus.UNPROCESSABLE_ENTITY);
+    }
+    
+	/**
 	 * Handle internal system errors
 	 * @param ex the exception
 	 * @param request the current request

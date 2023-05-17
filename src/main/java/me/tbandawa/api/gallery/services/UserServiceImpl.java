@@ -21,6 +21,9 @@ import me.tbandawa.api.gallery.requests.RegisterRequest;
 import me.tbandawa.api.gallery.responses.AuthResponse;
 import me.tbandawa.api.gallery.responses.UserResponse;
 import me.tbandawa.api.gallery.entities.User;
+import me.tbandawa.api.gallery.exceptions.NotProcessedException;
+import me.tbandawa.api.gallery.exceptions.ResourceConflictException;
+import me.tbandawa.api.gallery.exceptions.ResourceNotFoundException;
 import me.tbandawa.api.gallery.entities.Role;
 
 @Service
@@ -51,11 +54,11 @@ public class UserServiceImpl implements UserService {
 	public AuthResponse signUpUser(RegisterRequest request) {
 		
 		userDao.findByUsername(request.getUsername()).ifPresent(user -> {
-			throw new RuntimeException("Username alread exixts");
+			throw new ResourceConflictException("Username alread exixts");
 		});
 		
 		userDao.findByEmail(request.getEmail()).ifPresent(user -> {
-			throw new RuntimeException("Email alread exixts");
+			throw new ResourceConflictException("Email alread exixts");
 		});
 		
 		User user = new User();
@@ -70,26 +73,26 @@ public class UserServiceImpl implements UserService {
 
 	    if (requestRoles == null) {
 	      Role userRole = roleDao.findByName("user")
-	          .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+	          .orElseThrow(() -> new ResourceNotFoundException("Role is not found."));
 	      roles.add(userRole);
 	    } else {
 	    	requestRoles.forEach(role -> {
 	        switch (role) {
 	        case "admin":
 	          Role adminRole = roleDao.findByName("admin")
-	              .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+	              .orElseThrow(() -> new ResourceNotFoundException("Role is not found."));
 	          roles.add(adminRole);
 
 	          break;
 	        case "mod":
 	          Role modRole = roleDao.findByName("mod")
-	              .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+	              .orElseThrow(() -> new ResourceNotFoundException("Role is not found."));
 	          roles.add(modRole);
 
 	          break;
 	        default:
 	          Role userRole = roleDao.findByName("user")
-	              .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+	              .orElseThrow(() -> new ResourceNotFoundException("Role is not found."));
 	          roles.add(userRole);
 	        }
 	      });
@@ -98,7 +101,7 @@ public class UserServiceImpl implements UserService {
 		user.setRoles(roles);
 		
 		if (userDao.addUser(user) < 1) {
-            throw new RuntimeException("User not created");
+            throw new NotProcessedException("User not created");
         }
 		
 		return signInUser(new LoginRequest(request.getUsername(), request.getPassword()));
@@ -133,11 +136,11 @@ public class UserServiceImpl implements UserService {
 	public AuthResponse editUserProfile(RegisterRequest request) {
 		
 		userDao.findByUsername(request.getUsername()).ifPresent(user -> {
-			throw new RuntimeException("Username alread exixts");
+			throw new ResourceConflictException("Username alread exixts");
 		});
 		
 		userDao.findByEmail(request.getEmail()).ifPresent(user -> {
-			throw new RuntimeException("Email alread exixts");
+			throw new ResourceConflictException("Email alread exixts");
 		});
 		
 		User user = new User();
@@ -149,7 +152,7 @@ public class UserServiceImpl implements UserService {
 		user.setPassword(passwordEncoder.encode(request.getPassword()));
 		
 		if (userDao.editUser(user) == 0) {
-			throw new RuntimeException("Could not save changes");
+			throw new NotProcessedException("Could not save changes");
 		}
 		
 		return signInUser(new LoginRequest(request.getUsername(), request.getPassword()));
@@ -159,7 +162,7 @@ public class UserServiceImpl implements UserService {
 	public UserResponse getUserProfile(Long id) {
 		
 		User user = userDao.getUser(id)
-				.orElseThrow(() -> new RuntimeException("Error: User is not found."));
+				.orElseThrow(() -> new ResourceNotFoundException("User is not found."));
 		
 		user.getGallery().forEach(gallery -> {
 			gallery.setImages(imageService.getImages(gallery.getId()));
