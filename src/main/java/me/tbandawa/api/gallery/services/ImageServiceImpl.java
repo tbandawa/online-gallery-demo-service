@@ -188,7 +188,7 @@ public class ImageServiceImpl implements ImageService {
 		try {
             Files.createDirectories(imageUploadPath);
         } catch (Exception ex) {
-            throw new FileStorageException("Could not create the directory.", ex);
+            throw new FileStorageException("Could not create the directory.");
         }
 
 		// Get image extension
@@ -225,7 +225,7 @@ public class ImageServiceImpl implements ImageService {
 
 		} catch (IOException ex) {
 			ex.printStackTrace();
-			throw new FileStorageException("Could not store image " + imageName, ex);
+			throw new FileStorageException("Could not store image " + imageName);
 		}
 		return imageUri;
 	}
@@ -247,7 +247,7 @@ public class ImageServiceImpl implements ImageService {
 			};
 		} catch (Exception ex) {
 			ex.printStackTrace();
-			throw new FileStorageException("Could not save thumbnail " + imageName, ex);
+			throw new FileStorageException("Could not save thumbnail " + imageName);
 		} finally {
 			// Delete imageFile created
 			assert imageFile != null;
