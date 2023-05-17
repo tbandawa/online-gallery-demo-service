@@ -1,9 +1,10 @@
 package me.tbandawa.api.gallery.jwt;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.util.Arrays;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,6 +18,8 @@ import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import me.tbandawa.api.gallery.responses.ErrorResponse;
+
 @Component
 public class AuthEntryPointJwt implements AuthenticationEntryPoint {
 
@@ -29,15 +32,16 @@ public class AuthEntryPointJwt implements AuthenticationEntryPoint {
 
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-
-    final Map<String, Object> body = new HashMap<>();
-    body.put("status", HttpServletResponse.SC_UNAUTHORIZED);
-    body.put("error", "Unauthorized");
-    body.put("message", authException.getMessage());
-    body.put("path", request.getServletPath());
+    
+    ErrorResponse errorResponse = new ErrorResponse.ErrorResponseBuilder()
+            .withTimeStamp(LocalDateTime.now(ZoneOffset.UTC))
+            .withStatus(HttpServletResponse.SC_UNAUTHORIZED)
+            .withError("Unauthorized")
+            .withMessages((List<String>) Arrays.asList(new String[] {authException.getMessage()}))
+            .build();
 
     final ObjectMapper mapper = new ObjectMapper();
-    mapper.writeValue(response.getOutputStream(), body);
+    mapper.writeValue(response.getOutputStream(), errorResponse);
   }
 
 }

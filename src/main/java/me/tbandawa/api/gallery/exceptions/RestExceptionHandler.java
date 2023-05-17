@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import org.springframework.security.core.AuthenticationException;
 
 import me.tbandawa.api.gallery.responses.ErrorResponse;
 
@@ -82,6 +83,24 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
 	/**
+	 * Handle authentication exception
+	 * @param ex the exception
+	 * @param request the current request
+	 * @return a {@code ResponseEntity} wrapping {@code ErrorResponse}
+	 */
+    @ExceptionHandler(AuthenticationException.class)
+    @ResponseStatus(code = HttpStatus.UNAUTHORIZED)
+    public ResponseEntity<ErrorResponse> handleAuthrntication(AuthenticationException ex){
+        ErrorResponse errorResponse = new ErrorResponse.ErrorResponseBuilder()
+                .withTimeStamp(LocalDateTime.now(ZoneOffset.UTC))
+                .withStatus(HttpStatus.UNAUTHORIZED.value())
+                .withError(HttpStatus.UNAUTHORIZED.getReasonPhrase())
+                .withMessages((List<String>) Arrays.asList(new String[] {ex.getMessage()}))
+                .build();
+        return new ResponseEntity<ErrorResponse>(errorResponse, HttpStatus.UNAUTHORIZED);
+    }
+    
+    /**
 	 * Handle conflicting operation exception
 	 * @param ex the exception
 	 * @param request the current request
@@ -164,5 +183,4 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
                 .build();
     	return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
 	}
-
 }
