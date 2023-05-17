@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import me.tbandawa.api.gallery.entities.Images;
 import me.tbandawa.api.gallery.requests.LoginRequest;
@@ -63,6 +64,7 @@ public class UserController {
 	}
 	
 	@Operation(summary = "edit user details", description = "edit user info with request-body", tags = { "user" })
+	@SecurityRequirement(name = "Bearer Authentication")
 	@PutMapping("/user")
     public ResponseEntity<AuthResponse> editProfile(
     		Authentication authentication,
@@ -74,6 +76,7 @@ public class UserController {
     }
 	
 	@Operation(summary = "upload user photo", description = "upload user photo using multipart", tags = { "user" })
+	@SecurityRequirement(name = "Bearer Authentication")
 	@PostMapping(value = "/profile", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<Images> uploadProfilePhoto(
 			Authentication authentication,
@@ -85,6 +88,7 @@ public class UserController {
 	}
 	
 	@Operation(summary = "get user profile", description = "get user info by id", tags = { "user" })
+	@SecurityRequirement(name = "Bearer Authentication")
 	@GetMapping("/user/{id}")
     public ResponseEntity<UserResponse> getProfile(@PathVariable Long id) {
         return ResponseEntity.ok().body(userService.getUserProfile(id));
