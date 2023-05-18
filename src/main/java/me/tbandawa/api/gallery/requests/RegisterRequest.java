@@ -13,25 +13,24 @@ public class RegisterRequest {
 	
 	private Long userId;
 	
-	@NotBlank
-	@Size(max = 50)
+	@NotBlank(message = "First name can not be empty")
+	@Size(max = 50, message = "First name can not be longer than 50 characters")
 	private String firstname;
 	  
-	@NotBlank
-	@Size(max = 50)
+	@NotBlank(message = "Last name can not be empty")
+	@Size(max = 50, message = "Last name can not be longer than 50 characters")
 	private String lastname;
 	
-	@NotBlank
-	@Size(min = 3, max = 20)
+	@NotBlank(message = "Username can not be empty")
+	@Size(min = 3, max = 20, message = "Username must be between 3 and 20 characters long")
 	private String username;
 
-	@NotBlank
-	@Size(max = 50)
-	@Email
+	@NotBlank(message = "Email can not be empty")
+	@Email(message = "Invalid email")
 	private String email;
 	  
-	@NotBlank
-	@Size(min = 6, max = 40)
+	@NotBlank(message = "Password can not be empty")
+	@Size(min = 6, max = 40, message = "Password can not be empty")
 	private String password;
 
 	private Set<String> role;

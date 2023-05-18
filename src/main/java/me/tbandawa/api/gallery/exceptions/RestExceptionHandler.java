@@ -21,13 +21,10 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import lombok.extern.slf4j.Slf4j;
-
 import org.springframework.security.core.AuthenticationException;
 
 import me.tbandawa.api.gallery.responses.ErrorResponse;
 
-@Slf4j
 @RestControllerAdvice
 @RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE) 
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
@@ -166,7 +163,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 	}
     
 	/**
-	 * Handle entity field missing or invalid exception
+	 * Handle field request violations
 	 * @param ex the exception
 	 * @param headers the headers to be written to the response
 	 * @param status the selected response status
