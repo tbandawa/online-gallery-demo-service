@@ -13,16 +13,21 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.security.core.AuthenticationException;
 
 import me.tbandawa.api.gallery.responses.ErrorResponse;
 
+@Slf4j
 @RestControllerAdvice
 @RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE) 
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
@@ -139,7 +144,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 				.build();
 		return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
-	
+
 	/**
 	 * Handle method not supported exception
 	 * @param ex the exception
@@ -159,6 +164,29 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
                 .build();
         return new ResponseEntity<>(errorResponse, HttpStatus.METHOD_NOT_ALLOWED);
 	}
+    
+	/**
+	 * Handle entity field missing or invalid exception
+	 * @param ex the exception
+	 * @param headers the headers to be written to the response
+	 * @param status the selected response status
+	 * @param request the current request
+	 * @return a {@code ResponseEntity} wrapping {@code ErrorResponse}
+	 */
+	@Override
+	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
+			HttpHeaders headers, HttpStatus status, WebRequest request) {
+		List<String> messages = ex.getBindingResult().getAllErrors().stream()
+				.map(ObjectError::getDefaultMessage)
+				.collect(Collectors.toList());
+    	ErrorResponse errorResponse = new ErrorResponse.ErrorResponseBuilder()
+    			.withTimeStamp(LocalDateTime.now(ZoneOffset.UTC))
+                .withStatus(status.value())
+                .withError(status.getReasonPhrase())
+                .withMessages(messages)
+                .build();
+    	return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+	}
    
 	/**
 	 * Handle entity field missing or invalid exception
@@ -171,7 +199,6 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 	@Override
 	protected ResponseEntity<Object> handleBindException(BindException ex, HttpHeaders headers, HttpStatus status,
 			WebRequest request) {
-		// Get error messages
 		List<String> messages = ex.getBindingResult().getAllErrors().stream()
 				.map(ObjectError::getDefaultMessage)
 				.collect(Collectors.toList());
