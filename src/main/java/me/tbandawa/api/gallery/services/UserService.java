@@ -10,4 +10,5 @@ public interface UserService {
     AuthResponse signInUser(LoginRequest request);
     AuthResponse editUserProfile(RegisterRequest request);
     UserResponse getUserProfile(Long id);
+    String logoutUser(String token);
 }

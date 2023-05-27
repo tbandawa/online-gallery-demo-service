@@ -178,4 +178,9 @@ public class UserServiceImpl implements UserService {
 				imageService.getProfilePhoto(user.getId())
 			);
 	}
+
+	@Override
+	public String logoutUser(String token) {
+		return jwtUtils.expireToken(token.substring(7, token.length()));
+	}
 }
