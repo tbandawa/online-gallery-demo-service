@@ -1,16 +1,20 @@
 package me.tbandawa.api.gallery.jwt;
 
 import java.util.Date;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
+import me.tbandawa.api.gallery.daos.TokenDao;
+import me.tbandawa.api.gallery.entities.UserToken;
 import me.tbandawa.api.gallery.services.UserDetailsImpl;
-
 import io.jsonwebtoken.*;
 
 @Component
@@ -22,6 +26,9 @@ public class JwtUtils {
 
   @Value("${gallery.jwtExpirationMs}")
   private int jwtExpirationMs;
+  
+  @Autowired
+  private TokenDao tokenDao;
 
   public String generateJwtToken(Authentication authentication) {
 
@@ -42,6 +49,18 @@ public class JwtUtils {
   }
 
   public boolean validateJwtToken(String authToken) {
+	  
+	  final Claims claims = getAllClaimsFromToken(authToken);
+		
+		List<UserToken> tokenList = tokenDao.getToken(new Long((Integer)claims.get("user")));
+		if (tokenList.size() == 0) {
+			throw new AccessDeniedException("Invalid Verification.");
+		}
+		
+		if (!tokenList.get(0).getToken().equals(authToken)) {
+			throw new AccessDeniedException("Invalid Verification.");
+		}
+	  
     try {
       Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);
       return true;
@@ -58,5 +77,9 @@ public class JwtUtils {
     }
 
     return false;
+  }
+  
+  public Claims getAllClaimsFromToken(String token) {
+      return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody();
   }
 }
