@@ -79,6 +79,12 @@ public class JwtUtils {
     return false;
   }
   
+  public String expireToken(String token) {
+      final Claims claims = getAllClaimsFromToken(token);
+      claims.setExpiration(new Date((new Date()).getTime() - jwtExpirationMs));
+      return Jwts.builder().setClaims(claims).signWith(SignatureAlgorithm.HS512, jwtSecret).compact();
+  }
+  
   public Claims getAllClaimsFromToken(String token) {
       return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody();
   }

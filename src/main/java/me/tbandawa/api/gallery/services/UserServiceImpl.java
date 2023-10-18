@@ -13,13 +13,16 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import io.jsonwebtoken.Claims;
 import me.tbandawa.api.gallery.daos.RoleDao;
+import me.tbandawa.api.gallery.daos.TokenDao;
 import me.tbandawa.api.gallery.daos.UserDao;
 import me.tbandawa.api.gallery.jwt.JwtUtils;
 import me.tbandawa.api.gallery.requests.LoginRequest;
 import me.tbandawa.api.gallery.requests.RegisterRequest;
 import me.tbandawa.api.gallery.responses.AuthResponse;
 import me.tbandawa.api.gallery.responses.UserResponse;
+import me.tbandawa.api.gallery.entities.UserToken;
 import me.tbandawa.api.gallery.entities.User;
 import me.tbandawa.api.gallery.exceptions.NotProcessedException;
 import me.tbandawa.api.gallery.exceptions.ResourceConflictException;
@@ -49,6 +52,9 @@ public class UserServiceImpl implements UserService {
 	
 	@Autowired
 	private RoleDao roleDao;
+	
+	@Autowired
+	private TokenDao tokenDao;
 
 	@Override
 	public AuthResponse signUpUser(RegisterRequest request) {
@@ -116,6 +122,15 @@ public class UserServiceImpl implements UserService {
 		    SecurityContextHolder.getContext().setAuthentication(authentication);
 		    String jwt = jwtUtils.generateJwtToken(authentication);
 		    
+		    final Claims claims = jwtUtils.getAllClaimsFromToken(jwt);
+		    
+		    UserToken userToken = new UserToken();
+		    userToken.setUserId(new Long((Integer)claims.get("user")));
+		    userToken.setToken(jwt);
+		    
+		    tokenDao.deleteToken(new Long((Integer)claims.get("user")));
+		    tokenDao.addToken(userToken);
+		    
 		    UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();    
 		    List<String> roles = userDetails.getAuthorities().stream()
 		        .map(item -> item.getAuthority())
@@ -177,5 +192,12 @@ public class UserServiceImpl implements UserService {
 				galleryMapper.mapToGalleryResponse(user.getGallery()),
 				imageService.getProfilePhoto(user.getId())
 			);
+	}
+	
+	@Override
+	public String logoutUser(String token) {
+		final Claims claims = jwtUtils.getAllClaimsFromToken(token.substring(7, token.length()));
+        tokenDao.deleteToken((Integer)claims.get("user"));
+		return jwtUtils.expireToken(token.substring(7, token.length()));
 	}
 }
