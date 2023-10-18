@@ -27,7 +27,7 @@
 	
 	<bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
     	<property name="dataSource" ref="dataSource" />
-    	<property name="packagesToScan" value="me.tbandawa.api.gallery.models" />
+    	<property name="packagesToScan" value="me.tbandawa.api.gallery.entities" />
     	<property name="hibernateProperties">
         	<props>
             	<prop key="hibernate.hbm2ddl.auto">${spring.jpa.hibernate.ddl-auto}</prop>
@@ -42,21 +42,5 @@
     	<property name="username" value="${spring.datasource.username}" />
     	<property name="password" value="${spring.datasource.password}" />
 	</bean>
-	
-	<bean id="galleryDao" class="me.tbandawa.api.gallery.daos.GalleryDaoImpl">
-  		<property name="sessionFactory" ref="sessionFactory" />
-	</bean>
-	
-	<bean id="galleryService" class="me.tbandawa.api.gallery.services.GalleryServiceImpl">
-    	<property name="galleryDao" ref="galleryDao" />
-	</bean>
-	
-	<bean id="imageService" class="me.tbandawa.api.gallery.services.ImageServiceImpl">
-  		<property name="folderProperties" ref="folderProperties" />
-	</bean>
-	
-	<bean id="folderProperties" class="me.tbandawa.api.gallery.props.FolderProperties"/>
-	
-	<bean id="openApiConfiguration" class="me.tbandawa.api.gallery.config.OpenApiConfiguration"/>
 
 </beans>
