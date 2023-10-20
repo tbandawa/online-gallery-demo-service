@@ -1,8 +1,6 @@
 package me.tbandawa.api.gallery.jwt;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 import java.util.Arrays;
 import java.util.List;
 import javax.servlet.ServletException;
@@ -34,7 +32,6 @@ public class AuthEntryPointJwt implements AuthenticationEntryPoint {
     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
     
     ErrorResponse errorResponse = new ErrorResponse.ErrorResponseBuilder()
-            .withTimeStamp(LocalDateTime.now(ZoneOffset.UTC))
             .withStatus(HttpServletResponse.SC_UNAUTHORIZED)
             .withError("Unauthorized")
             .withMessages((List<String>) Arrays.asList(new String[] {authException.getMessage()}))
