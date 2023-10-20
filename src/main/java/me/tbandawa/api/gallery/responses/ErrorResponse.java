@@ -3,11 +3,15 @@ package me.tbandawa.api.gallery.responses;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 import lombok.Data;
+import me.tbandawa.api.gallery.utils.LocalDateTimeSerializer;
 
 @Data
 public class ErrorResponse {
 	
+	@JsonSerialize(using = LocalDateTimeSerializer.class)
 	private LocalDateTime timeStamp;
     private int status;
     private String error;
