@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.AuthenticationException;
 
 import me.tbandawa.api.gallery.responses.ErrorResponse;
@@ -100,6 +100,24 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
                 .withMessages((List<String>) Arrays.asList(new String[] {ex.getMessage()}))
                 .build();
         return new ResponseEntity<ErrorResponse>(errorResponse, HttpStatus.UNAUTHORIZED);
+    }
+    
+	/**
+	 * Handle access exception
+	 * @param ex the exception
+	 * @param request the current request
+	 * @return a {@code ResponseEntity} wrapping {@code ErrorResponse}
+	 */
+    @ExceptionHandler(AccessDeniedException.class)
+    @ResponseStatus(code = HttpStatus.FORBIDDEN)
+    public ResponseEntity<ErrorResponse> handleAccessDenied(AccessDeniedException ex){
+        ErrorResponse errorResponse = new ErrorResponse.ErrorResponseBuilder()
+                .withTimeStamp(LocalDateTime.now(ZoneOffset.UTC))
+                .withStatus(HttpStatus.FORBIDDEN.value())
+                .withError(HttpStatus.FORBIDDEN.getReasonPhrase())
+                .withMessages((List<String>) Arrays.asList(new String[] {ex.getMessage()}))
+                .build();
+        return new ResponseEntity<ErrorResponse>(errorResponse, HttpStatus.FORBIDDEN);
     }
     
     /**

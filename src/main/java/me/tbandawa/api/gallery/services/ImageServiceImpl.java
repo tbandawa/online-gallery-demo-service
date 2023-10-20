@@ -192,7 +192,8 @@ public class ImageServiceImpl implements ImageService {
         }
 
 		// Get image extension
-		String imageExtension = Objects.requireNonNull(image.getOriginalFilename()).split("\\.")[1];
+		int arrSize = Objects.requireNonNull(image.getOriginalFilename()).split("\\.").length;
+		String imageExtension = Objects.requireNonNull(image.getOriginalFilename()).split("\\.")[arrSize - 1];
 
 		// Name the original image file by appending imageIndex to "image_"
 		String originalImageName = createFileName("image_", imageExtension, imageIndex);
