@@ -1,8 +1,6 @@
 package me.tbandawa.api.gallery.controllers;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
@@ -23,12 +21,10 @@ import org.springframework.web.multipart.MultipartFile;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import me.tbandawa.api.gallery.entities.Images;
 import me.tbandawa.api.gallery.requests.GalleryRequest;
 import me.tbandawa.api.gallery.responses.GalleryResponse;
 import me.tbandawa.api.gallery.responses.PagedGalleryResponse;
 import me.tbandawa.api.gallery.services.GalleryService;
-import me.tbandawa.api.gallery.services.ImageService;
 import me.tbandawa.api.gallery.services.UserDetailsImpl;
 
 @RestController
@@ -41,30 +37,18 @@ public class GalleryController {
 	@Autowired
 	private GalleryService galleryService;
 	
-	@Autowired
-	private ImageService imageService;
-	
 	/**
 	 * Create new gallery
 	 */
 	@Operation(summary = "create new gallery", description = "send request-body object with multipart", tags = { "gallery" })
 	@PostMapping(value = "/gallery", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public GalleryResponse createGallery(
+	public ResponseEntity<GalleryResponse> createGallery(
 			Authentication authentication,
 			@Valid GalleryRequest gallery,
 			@RequestPart(value = "gallery_images", required = false) MultipartFile[] gallery_images) {
-		
 		UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-		
 		gallery.setUserId(userDetails.getId());
-		
-		GalleryResponse savedGallery = galleryService.saveGallery(gallery);
-		if (gallery_images.length > 0 && !gallery_images[0].isEmpty()) {
-			savedGallery.setImages(imageService.saveImages(savedGallery.getId(), gallery_images));
-		} else {
-			savedGallery.setImages(new ArrayList<Images>());
-		}
-		return savedGallery;
+		return ResponseEntity.ok().body(galleryService.saveGallery(gallery, gallery_images));
 	}
 	
 	/**
@@ -72,8 +56,8 @@ public class GalleryController {
 	 */
 	@Operation(summary = "get paged galleries", description = "retrieves a list of paged galleries", tags = { "gallery" })
 	@GetMapping("/galleries/{pageNumber}")
-	public PagedGalleryResponse getGalleries(@PathVariable(value = "pageNumber") int pageNumber) {
-		return galleryService.getGalleries(pageNumber);
+	public ResponseEntity<PagedGalleryResponse> getGalleries(@PathVariable(value = "pageNumber") int pageNumber) {
+		return ResponseEntity.ok().body(galleryService.getGalleries(pageNumber));
 	}
 	
 	/**
@@ -81,10 +65,8 @@ public class GalleryController {
 	 */
 	@Operation(summary = "searches galleries", description = "retrieves a list of searched galleries", tags = { "gallery" })
 	@GetMapping("/search/{query}")
-	public List<GalleryResponse> searchGalleries(@PathVariable(value = "query") String query) {
-		return galleryService.searchGallery(query).stream()
-				.peek(gallery -> gallery.setImages(imageService.getImages(gallery.getId())))
-				.collect(Collectors.toList());
+	public ResponseEntity<List<GalleryResponse>> searchGalleries(@PathVariable(value = "query") String query) {
+		return ResponseEntity.ok().body(galleryService.searchGallery(query));
 	}
 	
 	/**
@@ -92,10 +74,8 @@ public class GalleryController {
 	 */
 	@Operation(summary = "get a single gallery", description = "get gallery by <b>galleryId</b>", tags = { "gallery" })
 	@GetMapping("/gallery/{id}")
-	public GalleryResponse getGallery(@PathVariable(value = "id") Long galleryId) {
-		GalleryResponse gallery = galleryService.getGallery(galleryId);
-		gallery.setImages(imageService.getImages(gallery.getId()));
-		return gallery;
+	public ResponseEntity<GalleryResponse> getGallery(@PathVariable(value = "id") Long galleryId) {
+		return ResponseEntity.ok().body(galleryService.getGallery(galleryId));
 	}
 	
 	/**
@@ -104,9 +84,7 @@ public class GalleryController {
 	@Operation(summary = "delete a single gallery", description = "delete gallery by <b>galleryId</b>", tags = { "gallery" })
 	@DeleteMapping("/gallery/{id}")
 	public ResponseEntity<?> deleteGallery(@PathVariable(value = "id") Long galleryId) {
-		GalleryResponse gallery = galleryService.getGallery(galleryId);
-	    imageService.deleteImages(galleryId);
-	    galleryService.deleteGallery(gallery.getId());
+		galleryService.deleteGallery(galleryId);
 	    return ResponseEntity.ok().build();
 	}
 }
