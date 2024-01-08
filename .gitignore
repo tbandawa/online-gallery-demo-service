@@ -34,3 +34,6 @@ build/
 
 ### FILES ###
 files/
+images/
+photos/
+me.tbandawa.api.gallery.entities.Gallery
