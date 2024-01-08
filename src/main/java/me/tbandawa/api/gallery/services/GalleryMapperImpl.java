@@ -1,5 +1,7 @@
 package me.tbandawa.api.gallery.services;
 
+import static org.springframework.util.StringUtils.capitalize;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,8 +18,8 @@ public class GalleryMapperImpl implements GalleryMapper {
 	public Gallery mapToGallery(GalleryRequest request) {
 		Gallery gallery = new Gallery();
 		gallery.setUserid(request.getUserId());
-		gallery.setTitle(request.getTitle());
-		gallery.setDescription(request.getDescription());
+		gallery.setTitle(capitalize(request.getTitle()));
+		gallery.setDescription(capitalize(request.getDescription()));
 		return gallery;
 	}
 	

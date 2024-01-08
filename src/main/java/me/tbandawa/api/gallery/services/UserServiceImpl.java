@@ -13,6 +13,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import static org.springframework.util.StringUtils.capitalize;
+
 import io.jsonwebtoken.Claims;
 import me.tbandawa.api.gallery.daos.RoleDao;
 import me.tbandawa.api.gallery.daos.TokenDao;
@@ -68,8 +70,8 @@ public class UserServiceImpl implements UserService {
 		});
 		
 		User user = new User();
-		user.setFirstname(request.getFirstname());
-		user.setLastname(request.getLastname());
+		user.setFirstname(capitalize(request.getFirstname()));
+		user.setLastname(capitalize(request.getLastname()));
 		user.setUsername(request.getUsername());
 		user.setEmail(request.getEmail());
 		user.setPassword(passwordEncoder.encode(request.getPassword()));
@@ -160,8 +162,8 @@ public class UserServiceImpl implements UserService {
 		
 		User user = new User();
 		user.setId(request.getUserId());
-		user.setFirstname(request.getFirstname());
-		user.setLastname(request.getLastname());
+		user.setFirstname(capitalize(request.getFirstname()));
+		user.setLastname(capitalize(request.getLastname()));
 		user.setUsername(request.getUsername());
 		user.setEmail(request.getEmail());
 		user.setPassword(passwordEncoder.encode(request.getPassword()));
