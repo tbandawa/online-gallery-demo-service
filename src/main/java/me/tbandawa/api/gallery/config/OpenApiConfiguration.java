@@ -28,6 +28,6 @@ public class OpenApiConfiguration {
 	            .license(new License().name("Apache 2.0").url("http://springdoc.org")))
 	            .externalDocs(new ExternalDocumentation()
 	            .description("GitHub Page")
-	            .url("https://github.com/tbandawa/spring-image-upload"));
+	            .url("https://github.com/tbandawa/online-gallery-demo-service"));
 	}
 }
