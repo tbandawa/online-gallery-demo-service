@@ -26,6 +26,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import me.tbandawa.api.gallery.entities.Images;
 import me.tbandawa.api.gallery.requests.GalleryRequest;
 import me.tbandawa.api.gallery.responses.GalleryResponse;
+import me.tbandawa.api.gallery.responses.PagedGalleryResponse;
 import me.tbandawa.api.gallery.services.GalleryService;
 import me.tbandawa.api.gallery.services.ImageService;
 import me.tbandawa.api.gallery.services.UserDetailsImpl;
@@ -69,12 +70,10 @@ public class GalleryController {
 	/**
 	 * Get all galleries
 	 */
-	@Operation(summary = "get all galleries", description = "retrieves a list of galleries", tags = { "gallery" })
-	@GetMapping("/gallery")
-	public List<GalleryResponse> getGalleries() {
-		return galleryService.getAllGallery().stream()
-				.peek(gallery -> gallery.setImages(imageService.getImages(gallery.getId())))
-				.collect(Collectors.toList());
+	@Operation(summary = "get paged galleries", description = "retrieves a list of paged galleries", tags = { "gallery" })
+	@GetMapping("/galleries/{pageNumber}")
+	public PagedGalleryResponse getGalleries(@PathVariable(value = "pageNumber") int pageNumber) {
+		return galleryService.getGalleries(pageNumber);
 	}
 	
 	/**

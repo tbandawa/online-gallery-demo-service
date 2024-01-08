@@ -7,9 +7,11 @@ import org.springframework.stereotype.Service;
 
 import me.tbandawa.api.gallery.daos.GalleryDao;
 import me.tbandawa.api.gallery.entities.Gallery;
+import me.tbandawa.api.gallery.entities.PagedGallery;
 import me.tbandawa.api.gallery.exceptions.ResourceNotFoundException;
 import me.tbandawa.api.gallery.requests.GalleryRequest;
 import me.tbandawa.api.gallery.responses.GalleryResponse;
+import me.tbandawa.api.gallery.responses.PagedGalleryResponse;
 
 @Service
 public class GalleryServiceImpl implements GalleryService {
@@ -27,8 +29,22 @@ public class GalleryServiceImpl implements GalleryService {
 	}
 
 	@Override
-	public List<GalleryResponse> getAllGallery() {
-		return galleryMapper.mapToGalleryResponse(galleryDao.getAll());
+	public PagedGalleryResponse getGalleries(int pageNumber) {
+		
+		PagedGalleryResponse pagedResults = new PagedGalleryResponse();
+		PagedGallery pagedGallery = galleryDao.getGalleries(pageNumber);
+		pagedResults.setCount(pagedGallery.getCount());
+		pagedResults.setPerPage(pagedGallery.getPerPage());
+		pagedResults.setCurrentPage(pagedGallery.getCurrentPage());
+		pagedResults.setNextPage(pagedGallery.getNextPage());
+		
+		List<Gallery> galleries = (List<Gallery>)pagedGallery.getGallaries();
+		
+		List<GalleryResponse> alleryResponses = galleryMapper.mapToGalleryResponse(galleries);
+		
+		pagedResults.setGallaries(alleryResponses);
+		
+		return pagedResults;
 	}
 	
 	@Override
