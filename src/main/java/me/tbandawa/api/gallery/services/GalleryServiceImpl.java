@@ -62,7 +62,7 @@ public class GalleryServiceImpl implements GalleryService {
 			.peek(gallery -> gallery.setImages(imageService.getImages(gallery.getId())))
 			.collect(Collectors.toList());
 		
-		pagedResults.setGallaries(alleryResponses);
+		pagedResults.setGalleries(alleryResponses);
 		
 		return pagedResults;
 	}

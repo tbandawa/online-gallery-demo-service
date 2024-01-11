@@ -152,14 +152,6 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public AuthResponse editUserProfile(RegisterRequest request) {
 		
-		userDao.findByUsername(request.getUsername()).ifPresent(user -> {
-			throw new ResourceConflictException("Username alread exixts");
-		});
-		
-		userDao.findByEmail(request.getEmail()).ifPresent(user -> {
-			throw new ResourceConflictException("Email alread exixts");
-		});
-		
 		User user = new User();
 		user.setId(request.getUserId());
 		user.setFirstname(capitalize(request.getFirstname()));

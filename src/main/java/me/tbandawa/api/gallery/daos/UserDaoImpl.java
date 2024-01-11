@@ -55,9 +55,7 @@ public class UserDaoImpl implements UserDao {
 	@Transactional
 	public int editUser(User user) {
 		Session session = this.sessionFactory.getCurrentSession();
-		Query<?> query = session.createQuery("UPDATE User SET username = :username, email = :email, firstname = :firstname, lastname = :lastname, password = :password WHERE id = :id");
-		query.setParameter("username", user.getUsername());
-		query.setParameter("email", user.getEmail());
+		Query<?> query = session.createQuery("UPDATE User SET firstname = :firstname, lastname = :lastname, password = :password WHERE id = :id");
 		query.setParameter("firstname", user.getFirstname());
 		query.setParameter("lastname", user.getLastname());
 		query.setParameter("password", user.getPassword());

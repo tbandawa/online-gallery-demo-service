@@ -14,5 +14,5 @@ public class PagedGalleryResponse {
 	private int perPage;
 	private int currentPage;
 	private int nextPage;
-	private List<GalleryResponse> gallaries;
+	private List<GalleryResponse> galleries;
 }
