@@ -133,7 +133,7 @@ public class ImageServiceImpl implements ImageService {
 		            .map(File::getPath)
 		            .map(filePath ->
 		            	ServletUriComponentsBuilder.fromCurrentContextPath()
-		            		.path(filePath)
+		            		.path(File.separatorChar + filePath)
 		            		.toUriString()
 		            )
 		            .collect(Collectors.toList());

@@ -33,7 +33,6 @@ build/
 .vscode/
 
 ### FILES ###
-files/
-images/
-photos/
+/images/**
+/photos/**
 me.tbandawa.api.gallery.entities.Gallery

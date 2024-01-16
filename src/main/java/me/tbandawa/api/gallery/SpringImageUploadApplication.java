@@ -21,6 +21,6 @@ public class SpringImageUploadApplication extends SpringBootServletInitializer i
 	
 	@Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-		registry.addResourceHandler("/images/**").addResourceLocations("file:images/");
+		registry.addResourceHandler("/images/**", "/photos/**").addResourceLocations("file:images/", "file:photos/");
     }
 }
