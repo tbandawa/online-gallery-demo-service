@@ -220,7 +220,7 @@ public class ImageServiceImpl implements ImageService {
 
 			// Generate and return image URI
 			imageUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-					.path(folderName + File.separatorChar + galleryId + File.separatorChar)
+					.path(File.separatorChar +folderName + File.separatorChar + galleryId + File.separatorChar)
 					.path(imageName)
 					.toUriString();
 
@@ -242,7 +242,7 @@ public class ImageServiceImpl implements ImageService {
 			if (ImageIO.write(outputImage, imageExtension, targetLocation.toAbsolutePath().toFile())) {
 				// Generate and return thumbnail URI
 				thumbnailUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-						.path(folderName + File.separatorChar + galleryId + File.separatorChar)
+						.path(File.separatorChar +folderName + File.separatorChar + galleryId + File.separatorChar)
 						.path(imageName)
 						.toUriString();
 			};
