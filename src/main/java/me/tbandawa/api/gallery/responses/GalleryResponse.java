@@ -16,4 +16,5 @@ public class GalleryResponse {
 	private List<Images> images;
     private Date created;
     private Long userId;
+    private UserInfoResponse user;
 }

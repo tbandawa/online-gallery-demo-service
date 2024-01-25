@@ -16,6 +16,8 @@ import me.tbandawa.api.gallery.exceptions.ResourceNotFoundException;
 import me.tbandawa.api.gallery.requests.GalleryRequest;
 import me.tbandawa.api.gallery.responses.GalleryResponse;
 import me.tbandawa.api.gallery.responses.PagedGalleryResponse;
+import me.tbandawa.api.gallery.responses.UserInfoResponse;
+import me.tbandawa.api.gallery.responses.UserResponse;
 
 @Service
 public class GalleryServiceImpl implements GalleryService {
@@ -28,6 +30,9 @@ public class GalleryServiceImpl implements GalleryService {
 	
 	@Autowired
 	private GalleryMapper galleryMapper;
+	
+	@Autowired
+	private UserService userService;
 
 	@Override
 	public GalleryResponse saveGallery(GalleryRequest galleryRequest, MultipartFile[] gallery_images) {
@@ -55,14 +60,22 @@ public class GalleryServiceImpl implements GalleryService {
 		
 		List<Gallery> galleries = (List<Gallery>)pagedGallery.getGallaries();
 		
-		List<GalleryResponse> alleryResponses = galleryMapper.mapToGalleryResponse(galleries);
+		List<GalleryResponse> galleryResponses = galleryMapper.mapToGalleryResponse(galleries);
 		
-		alleryResponses
+		galleryResponses
 			.stream()
-			.peek(gallery -> gallery.setImages(imageService.getImages(gallery.getId())))
+			.peek(gallery -> {
+				UserResponse userResponse = userService.getUserProfile(gallery.getUserId());
+				Images images = new Images();
+				images.setThumbnail(userResponse.getProfilePhoto().getThumbnail());
+				images.setImage(userResponse.getProfilePhoto().getImage());
+				UserInfoResponse userInfo = new UserInfoResponse(userResponse.getFirstname(), userResponse.getLastname(), images);
+				gallery.setUser(userInfo);
+				gallery.setImages(imageService.getImages(gallery.getId()));
+			})
 			.collect(Collectors.toList());
 		
-		pagedResults.setGalleries(alleryResponses);
+		pagedResults.setGalleries(galleryResponses);
 		
 		return pagedResults;
 	}

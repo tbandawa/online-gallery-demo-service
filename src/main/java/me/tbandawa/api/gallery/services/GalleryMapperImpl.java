@@ -31,14 +31,15 @@ public class GalleryMapperImpl implements GalleryMapper {
 				gallery.getDescription(),
 				null,
 				gallery.getCreated(),
-				gallery.getUserid()
+				gallery.getUserid(),
+				null
 			);
 	}
 
 	@Override
 	public List<GalleryResponse> mapToGalleryResponse(List<Gallery> galleries) {
 		return galleries.stream()
-				.map(gallery -> new GalleryResponse(gallery.getId(), gallery.getTitle(), gallery.getDescription(), gallery.getImages(), gallery.getCreated(), gallery.getUserid()))
+				.map(gallery -> new GalleryResponse(gallery.getId(), gallery.getTitle(), gallery.getDescription(), gallery.getImages(), gallery.getCreated(), gallery.getUserid(), null))
 				.collect(Collectors.toList());
 	}
 }
