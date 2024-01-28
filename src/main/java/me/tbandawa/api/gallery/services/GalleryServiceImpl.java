@@ -92,8 +92,16 @@ public class GalleryServiceImpl implements GalleryService {
 	public GalleryResponse getGallery(long id) {
 		Gallery gallery = galleryDao.get(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Gallery with id: " + id + " not found"));
+		
+		UserResponse userResponse = userService.getUserProfile(gallery.getUserid());
+		Images images = new Images();
+		images.setThumbnail(userResponse.getProfilePhoto().getThumbnail());
+		images.setImage(userResponse.getProfilePhoto().getImage());
+		UserInfoResponse userInfo = new UserInfoResponse(userResponse.getFirstname(), userResponse.getLastname(), images);
+		
 		GalleryResponse galleryResponse = galleryMapper.mapToGalleryResponse(gallery);
 		galleryResponse.setImages(imageService.getImages(gallery.getId()));
+		galleryResponse.setUser(userInfo);
 		return galleryResponse;
 	}
 
