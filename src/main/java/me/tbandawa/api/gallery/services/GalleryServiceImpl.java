@@ -84,7 +84,15 @@ public class GalleryServiceImpl implements GalleryService {
 	public List<GalleryResponse> searchGallery(String query) {
 		return galleryMapper.mapToGalleryResponse(galleryDao.searchGallery(query))
 					.stream()
-					.peek(gallery -> gallery.setImages(imageService.getImages(gallery.getId())))
+					.peek(gallery -> {
+						UserResponse userResponse = userService.getUserProfile(gallery.getUserId());
+						Images images = new Images();
+						images.setThumbnail(userResponse.getProfilePhoto().getThumbnail());
+						images.setImage(userResponse.getProfilePhoto().getImage());
+						UserInfoResponse userInfo = new UserInfoResponse(userResponse.getFirstname(), userResponse.getLastname(), images);
+						gallery.setUser(userInfo);
+						gallery.setImages(imageService.getImages(gallery.getId()));
+					})
 					.collect(Collectors.toList());
 	}
 
