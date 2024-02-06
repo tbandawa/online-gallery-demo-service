@@ -58,6 +58,7 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	private TokenDao tokenDao;
 
+	@SuppressWarnings("null")
 	@Override
 	public AuthResponse signUpUser(RegisterRequest request) {
 		
@@ -149,6 +150,7 @@ public class UserServiceImpl implements UserService {
 			);
 	}
 	
+	@SuppressWarnings("null")
 	@Override
 	public AuthResponse editUserProfile(RegisterRequest request) {
 		
