@@ -1,0 +1,21 @@
+services:
+
+  db:
+    ports:
+      - 5432:5432
+    container_name: postgres-container
+    image: postgres
+    environment:
+      - POSTGRES_DB=gallerydb
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_USER=user
+    restart: always
+
+  backend:
+    build: .
+    container_name: online-gallery-service
+    ports:
+      - 8075:8075
+    depends_on:
+      - db
+    restart: always
