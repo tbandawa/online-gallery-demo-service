@@ -13,7 +13,7 @@
 	<groupId>me.tbandawa</groupId>
 	<artifactId>spring-image-upload</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>war</packaging>
+	<packaging>jar</packaging>
 	
 	<name>spring-image-upload</name>
 	<description>Demo project for image upload api</description>
