@@ -17,7 +17,8 @@ After making changes to the code, navigate to the projects root directory and ru
 ```docker compose -f ./docker-compose.yaml up -d```<br>
 
 ### APIs
-[API Specification](http://localhost:8075/spring-image-upload/swagger-ui/index.html)
+API Specification link<br> 
+```http://localhost:8075/spring-image-upload/swagger-ui/index.html```
 
 ### Client Apps
 [Repository to client apps](https://github.com/tbandawa/online-gallery-demo-apps)
