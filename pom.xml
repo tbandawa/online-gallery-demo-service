@@ -145,6 +145,7 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+
 				<executions>
 					<execution>
 						<id>repackage</id>
@@ -160,22 +161,4 @@
 		</plugins>
 	</build>
 	
-	<profiles>
-		<profile>
-			<id>default</id>
-			<activation>
-				<activeByDefault>true</activeByDefault>
-			</activation>
-			<properties>
-				<skip.repackage>false</skip.repackage>
-			</properties>
-		</profile>
-		<profile>
-			<id>prod</id>
-			<properties>
-				<skip.repackage>true</skip.repackage>
-			</properties>
-		</profile>
-	</profiles>
-
 </project>
