@@ -26,5 +26,4 @@ public class RoleDaoImpl implements RoleDao {
 		Role results = (Role)query.uniqueResult();
 		return results == null? Optional.empty() : Optional.of(results);
 	}
-
 }
